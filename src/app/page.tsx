@@ -1,71 +1,91 @@
-import FeedCard from "./_components/feed";
+'use client';
 
-export default function feed(){
-    return (
-        <div className="min-h-screen flex items-start justify-end bg-gray-100 p-4">
-        <div className="min-h-screen bg-gray-100 py-8 ">
-          <div className="border-r-4 border-gray-300 pr-4"></div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
-            <FeedCard
-              title="Explore Next.js"
-              description="Learn how to build amazing web applications with Next.js."
+import FeedCard from './_components/feed';
+import { useEffect, useRef } from 'react';
 
-              link="https://nextjs.org/"
-            />
-            <FeedCard
-              title="Tailwind CSS"
-              description="Rapidly build modern websites without leaving your HTML."
+const FeedComponent = () => {
+  const feedRef = useRef<HTMLDivElement>(null);
 
-              link="https://tailwindcss.com/"
-            />
-            <FeedCard
-              title="TypeScript"
-              description="Strongly typed programming for JavaScript developers."
+  useEffect(() => {
+    const feedElement = feedRef.current;
 
-              link="https://www.typescriptlang.org/"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
-            <FeedCard
-              title="Explore Next.js"
-              description="Learn how to build amazing web applications with Next.js."
+    if (!feedElement) return;
 
-              link="https://nextjs.org/"
-            />
-            <FeedCard
-              title="Tailwind CSS"
-              description="Rapidly build modern websites without leaving your HTML."
+    const interval = setInterval(() => {
+      if (feedElement.scrollWidth - feedElement.scrollLeft <= feedElement.clientWidth) {
+        // Reset to the start when reaching the end
+        feedElement.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        // Scroll right
+        feedElement.scrollBy({ left: 300, behavior: 'smooth' });
+      }
+    }, 3000);
 
-              link="https://tailwindcss.com/"
-            />
-            <FeedCard
-              title="TypeScript"
-              description="Strongly typed programming for JavaScript developers."
+    return () => clearInterval(interval);
+  }, []);
 
-              link="https://www.typescriptlang.org/"
-            />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
-            <FeedCard
-              title="Explore Next.js"
-              description="Learn how to build amazing web applications with Next.js."
+  return (
+    <div
+      ref={feedRef}
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        overflowX: 'auto',
+        scrollbarWidth: 'none', // For Firefox
+        msOverflowStyle: 'none', // For IE
+      }}
+      className="feed-container"
+    >
+      {Array.from({ length: 20 }).map((_, index) => (
+        <div
+          key={index}
+          style={{
+            flex: '0 0 auto',
+            width: '300px',
+            marginRight: '16px', // Add spacing between cards
+          }}
+        >
 
-              link="https://nextjs.org/"
-            />
-            <FeedCard
-              title="Tailwind CSS"
-              description="Rapidly build modern websites without leaving your HTML."
-
-              link="https://tailwindcss.com/"
-            />
-            <FeedCard
-              title="TypeScript"
-              description="Strongly typed programming for JavaScript developers."
-
-              link="https://www.typescriptlang.org/"
-            />
-          </div>
+          <FeedCard exchange_rate={`Card ${index + 1}`} />
         </div>
-        </div>
-      );
-    };
+      ))}
+      <style jsx>{`
+        .feed-container::-webkit-scrollbar {
+          display: none; /* Hide scrollbars for Webkit browsers */
+        }
+      `}</style>
+    </div>
+  );
+};
+
+
+const SearchBar = () => {
+  return (
+    <div style={{ marginTop: '20px', textAlign: 'center' }}>
+      <input
+        type="text"
+        placeholder="Search..."
+        style={{
+          padding: '10px',
+          width: '80%',
+          maxWidth: '500px',
+          borderRadius: '5px',
+          border: '1px solid #ccc',
+        }}
+      />
+    </div>
+  );
+};
+
+const Page = () => {
+  return (
+    <div>
+      <FeedComponent />
+      <SearchBar />
+    </div>
+  );
+};
+
+
+
+export default FeedComponent;
