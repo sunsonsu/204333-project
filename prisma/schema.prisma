@@ -16,5 +16,33 @@ datasource db {
 model User {
   id Int @id @default(autoincrement())
   email String @unique
-  name String?
+  password String
+  name String
+
+  registerdAt DateTime @default(now())
+  lastLogin DateTime?
+
+  favorite Favorite[]
+}
+
+model Favorite {
+  uid Int
+  c String
+
+  user User @relation(fields: [uid], references: [id])
+  coin ExchangeRate @relation(fields: [c], references: [coin])
+
+  createdAt DateTime @default(now())
+  deletedAt DateTime?
+
+  @@id([uid, c])
+}
+
+model ExchangeRate {
+  coin String @id
+  rate Float
+
+  updatedAt DateTime @updatedAt
+
+  favorite Favorite[]
 }
