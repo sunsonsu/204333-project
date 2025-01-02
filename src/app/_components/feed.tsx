@@ -1,5 +1,4 @@
-import React from "react";
-
+// Description: This file is about each FeedCard that will display in FeedGroup
 type FeedCardProps = {
   name: string;
   exchange_rate: string;
@@ -7,9 +6,10 @@ type FeedCardProps = {
   update: string;
 };
 
+
 const FeedCard: React.FC<FeedCardProps> = ({ name, exchange_rate, link, update }) => {
   return (
-    <div className="mt-4 w-64 h-80 max-w-xs mx-auto bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+    <div className="mt-4 w-64 h-80 max-w-xs mx-auto bg-white border rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 ">
       {/* Content Section */}
       <div className="p-4">
       <h2 className="text-xl font-semibold text-gray-800 mb-2">
