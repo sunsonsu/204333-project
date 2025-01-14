@@ -7,23 +7,23 @@ export default function SignUp() {
       <h1 className="text-3xl font-semibold">Sign Up</h1>
       <input
         type="text"
-        className="bg-background border-b border-gray-500 text-white outline-none w-full px-1"
+        className="bg-background border-b border-gray-500 text-foreground outline-none w-full px-1"
         placeholder="Email..."
         name="email"
       />
       <input
         type="password"
-        className="bg-background border-b border-gray-500 text-white outline-none w-full px-1"
+        className="bg-background border-b border-gray-500 text-foreground outline-none w-full px-1"
         placeholder="Password..."
         name="password"
       />
       <input
         type="password"
-        className="bg-background border-b border-gray-500 text-white outline-none w-full px-1"
+        className="bg-background border-b border-gray-500 text-foreground outline-none w-full px-1"
         placeholder="Confirm Password..."
         name="password"
       />
-      <button className="border text-xl px-2 py-1 rounded-md hover:bg-white hover:text-black">
+      <button className="border text-xl px-2 py-1 rounded-md hover:bg-foreground hover:text-background">
         Sign Up
       </button>
       <div className="text-xs">
