@@ -1,11 +1,16 @@
 import React from "react";
 import SignIn from "./_components/signin";
 import SignUp from "./_components/signup";
+import { Metadata } from "next";
 
 interface SearchPageProps {
   searchParams: Promise<{
     mode: "signup" | "signin" | undefined;
   }>;
+}
+
+export const metadata:Metadata = {
+  title: "Sign In/Up page"
 }
 
 export default async function page({ searchParams }: SearchPageProps) {
