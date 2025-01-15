@@ -31,7 +31,7 @@ export async function POST(req:NextRequest) {
         if (process.env.NODE_ENV==="production") options = { ...object, httpOnly: true, sameSite: "lax", secure: true };
         cookieStore.set("token", token, options);
         
-        return Json();
+        return Json({ message: "SUCCESS" });
     }
     if (err_login.message==="NOT_REGISTER") return Json({ message: err_login.message }, 404);
     if (err_login.message==="NOT_MATCH") return Json({ message: err_login.message }, 401);
