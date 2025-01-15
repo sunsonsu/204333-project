@@ -5,7 +5,7 @@ import axios from "axios";
 import { FeedCardProp } from "@/interface/feedcard/prop";
 
 interface ResponseInterface {
-  rates: { [key: string]: number }
+  api_data: { [key: string]: number }
 }
 
 const Carousel: React.FC = () => {
@@ -14,15 +14,14 @@ const Carousel: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get<ResponseInterface>("https://openexchangerates.org/api/latest.json?app_id=e2a58e93cb8946ad9f6fb0f59cd08efd");
+        const response = await axios.get<ResponseInterface>("/api/currency");
         if (response.status === 200) {
-          const rates = response.data.rates;
+          const rates = response.data.api_data;
           const feedCards = Object.keys(rates).map((key) => {
             return {
               name: key,
-              exchange_rate: rates[key],
-              link: 'https://flagsapi.com/TH/flat/64.png',
-              timestamp: new Date().toLocaleString("en-US", {
+              exchange_rate: rates[key].rate,
+              timestamp: new Date(rates[key].updatedAt).toLocaleString("en-US", {
                 year: "numeric",
                 month: "long",
                 day: "numeric",
@@ -38,15 +37,11 @@ const Carousel: React.FC = () => {
         console.error('Error fetching data:', error);
       }
     };
-
     fetchData();
   }, []);
-
   if (!data) {
     return <div>Loading...</div>;
   }
-
-
   return (
     <div className="flex w-screen overflow-x-scroll ">
       {data.map(card=>{

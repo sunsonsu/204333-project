@@ -1,6 +1,8 @@
 'use client';
 
+import axios from 'axios';
 import { useState } from 'react';
+
 
 const CurrencyConverterForm = () => {
   const [amount, setAmount] = useState('');
@@ -43,7 +45,7 @@ const CurrencyConverterForm = () => {
   };
 
   return (
-    <div className="bg-white rounded-lg mt-10 p-4 shadow-md w-96 mx-auto">
+    <div className="bg-navy rounded-lg mt-10 p-4 shadow-md w-96 mx-auto">
       <form onSubmit={handleSubmit}>
         {/* Amount Input */}
         <div className="mb-4">
