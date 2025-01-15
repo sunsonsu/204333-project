@@ -1,31 +1,26 @@
 // Description: This file is about each FeedCard that will display in FeedGroup
-type FeedCardProps = {
-  name: string;
-  exchange_rate: string;
-  link: string;
-  update: string;
-};
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { FeedCardProp } from '@/interface/feedcard/prop';
+import { useSearchParams } from 'next/navigation';
 
 
-const FeedCard: React.FC<FeedCardProps> = ({ name, exchange_rate, link, update }) => {
+const FeedCard: React.FC<FeedCardProp> = ({ name, exchange_rate, link, timestamp }) => {
+  useSearchParams();
+
   return (
-    <div className="mt-4 w-64 h-80 max-w-xs mx-auto bg-white border rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 ">
-      {/* Content Section */}
-      <div className="p-4">
+    <div className="bg-white border hover:shadow-lg transition-shadow rounded-lg duration-300 min-w-64 h-48 p-4 m-2">
       <h2 className="text-xl font-semibold text-gray-800 mb-2">
-          {name} Country Name
+        Currency:{name}
       </h2>
-      <p className="text-gray-600 text-sm">
-        Last Update: {update} </p>
-      <br></br>
-      <br></br>
-      <h3 className="text-gray-600 text-sm mb-4 font-semibold text-center">{exchange_rate} Exchange Rate</h3>
-      <br></br>
-      <br></br>
-      <div className="flex justify-center">
-        <img src="https://flagsapi.com/TH/flat/64.png" alt="Country Flag" />
-      </div>
-      </div>
+      <p className="text-gray-600 text-sm"> 
+        {timestamp}
+      </p>
+
+      <h1 className="text-gray-600 mt-16 justify-center font-semibold text-center">
+      {exchange_rate} 
+      </h1>
+
     </div>
   );
 };

@@ -1,59 +1,59 @@
-'use client';
+'use client'
+import React, { useState, useEffect } from "react";
+import FeedCard from "./feed";
+import axios from "axios";
+import { FeedCardProp } from "@/interface/feedcard/prop";
 
-import FeedCard from './feed';
-import { useEffect, useRef } from 'react';
+interface ResponseInterface {
+  rates: { [key: string]: number }
+}
 
+const Carousel: React.FC = () => {
+  const [data, setData] = useState<FeedCardProp[]>([]);
 
-const FeedGroup = () => {
-    const feedRef = useRef<HTMLDivElement>(null);
-  
-    useEffect(() => {
-      const feedElement = feedRef.current;
-  
-      if (!feedElement) return;
-  
-      const interval = setInterval(() => {
-        if (feedElement.scrollWidth - feedElement.scrollLeft <= feedElement.clientWidth) {
-          // Reset to the start when reaching the end
-          feedElement.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-          // Scroll right
-          feedElement.scrollBy({ left: 300, behavior: 'smooth' });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get<ResponseInterface>("https://openexchangerates.org/api/latest.json?app_id=e2a58e93cb8946ad9f6fb0f59cd08efd");
+        if (response.status === 200) {
+          const rates = response.data.rates;
+          const feedCards = Object.keys(rates).map((key) => {
+            return {
+              name: key,
+              exchange_rate: rates[key],
+              link: 'https://flagsapi.com/TH/flat/64.png',
+              timestamp: new Date().toLocaleString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+              }),
+            };
+          });
+          setData(feedCards);
         }
-      }, 3000);
-  
-      return () => clearInterval(interval);
-    }, []);
-  
-    return (
-      <div
-        ref={feedRef}
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          overflowX: 'auto',
-          scrollbarWidth: 'none', // For Firefox
-          msOverflowStyle: 'none', // For IE
-        }}
-        className="feed-container"
-      >
-        {Array.from({ length: 20 }).map((_, index) => (
-          <div
-            key={index}
-            style={{
-              flex: '0 0 auto',
-              width: '300px',
-              marginRight: '16px', // Add spacing between cards
-            }}
-          >
-  
-            <FeedCard exchange_rate={`Card ${index + 1}`} />
-          </div>
-        ))}
-  
-      </div>
-    );
-  };
-  
-  export default FeedGroup;
-  
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+
+
+  return (
+    <div className="flex w-screen overflow-x-scroll ">
+      {data.map(card=>{
+        return <FeedCard key={card.name} {...card} />
+      })}
+    </div>
+  );
+};
+
+export default Carousel;
