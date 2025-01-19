@@ -11,7 +11,7 @@ const FeedCard: React.FC<FeedCardProp> = ({
   timestamp,
   fav,
 }) => {
-  const data = useContext(DataContext);
+  const [data, setData] = useContext(DataContext);
   const [base, setBase] = useState<FeedCardProp | null>(null);
   const sp = useSearchParams();
 

@@ -3,7 +3,13 @@ import { FeedCardProp } from "@/interface/feedcard/prop";
 import { DefaultProp } from "@/interface/page";
 import axiosCustom from "@/lib/axios";
 import axios from "axios";
-import React, { createContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 
 // Type & Interface
 interface ResponseInterface {
@@ -11,7 +17,9 @@ interface ResponseInterface {
 }
 
 // Context
-export const DataContext = createContext<FeedCardProp[]>([]);
+export const DataContext = createContext<
+  [FeedCardProp[], Dispatch<SetStateAction<FeedCardProp[]>>]
+>([[], () => {}]);
 
 export default function DataProvider(prop: DefaultProp) {
   const [data, setData] = useState<FeedCardProp[]>([]);
@@ -68,6 +76,8 @@ export default function DataProvider(prop: DefaultProp) {
     fetchData();
   }, []);
   return (
-    <DataContext.Provider value={data}>{prop.children}</DataContext.Provider>
+    <DataContext.Provider value={[data, setData]}>
+      {prop.children}
+    </DataContext.Provider>
   );
 }
