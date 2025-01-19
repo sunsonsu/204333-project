@@ -5,6 +5,10 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+interface ResponseData {
+  timestamp: number;
+  rates: { [key: string]: number }
+}
 
 export async function GET(req:NextRequest) {
     // get data from api and store in database with prisma
@@ -15,7 +19,7 @@ export async function GET(req:NextRequest) {
       };
     
     try {
-    const response = await axios.get("https://openexchangerates.org/api/latest.json?app_id=e2a58e93cb8946ad9f6fb0f59cd08efd");
+    const response = await axios.get<ResponseData>("https://openexchangerates.org/api/latest.json?app_id=e2a58e93cb8946ad9f6fb0f59cd08efd");
     if (response.status === 200) {
         
         const timestamp = response.data.timestamp;
@@ -41,7 +45,7 @@ export async function GET(req:NextRequest) {
           },
         });
       }
-        console.log("upserteed database")
+      
         const db_data = await prisma.exchangeRate.findMany({
           orderBy: {
             coin: 'asc',

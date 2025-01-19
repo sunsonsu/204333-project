@@ -1,51 +1,70 @@
-'use client'
-import React, { useState, useEffect } from "react";
+"use client";
+import React, {
+  useEffect,
+  useContext,
+  useRef,
+  WheelEventHandler,
+  useState,
+} from "react";
 import FeedCard from "./feed";
-import axios from "axios";
-import { FeedCardProp } from "@/interface/feedcard/prop";
-
-interface ResponseInterface {
-  api_data: { [key: string]: number }
-}
+import { DataContext } from "@/context/data";
 
 const Carousel: React.FC = () => {
-  const [data, setData] = useState<FeedCardProp[]>([]);
+  const data = useContext(DataContext);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const grpRef = useRef<HTMLDivElement | null>(null);
+  const [beforeScroll, setBeforeScroll] = useState(-1);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get<ResponseInterface>("/api/currency");
-        if (response.status === 200) {
-          const rates = response.data.api_data;
-          const feedCards = Object.keys(rates).map((key) => {
-            return {
-              name: key,
-              exchange_rate: rates[key].rate,
-              timestamp: new Date(rates[key].updatedAt).toLocaleString("en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-              }),
-            };
-          });
-          setData(feedCards);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
+    intervalRef.current = setInterval(scrolling, 5000);
+    if (grpRef.current) grpRef.current.scroll({ left: 0, behavior: "smooth" });
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
     };
-    fetchData();
   }, []);
+
+  function scrolling() {
+    setBeforeScroll((pre) => {
+      if (!grpRef.current) return -1;
+      if (pre === grpRef.current.scrollLeft) {
+        grpRef.current.scroll({
+          left: 0,
+          behavior: "smooth",
+        });
+        return -1;
+      } else {
+        grpRef.current.scroll({
+          left: grpRef.current.scrollLeft + 265,
+          behavior: "smooth",
+        });
+        return grpRef.current.scrollLeft;
+      }
+    });
+  }
+
+  const onScrolling: WheelEventHandler<HTMLDivElement> = (e) => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(scrolling, 10000);
+
+    // scroll
+    if (grpRef.current)
+      grpRef.current.scroll({
+        left: grpRef.current.scrollLeft + e.deltaY,
+        behavior: "smooth",
+      });
+  };
+
   if (!data) {
     return <div>Loading...</div>;
   }
   return (
-    <div className="flex w-screen overflow-x-scroll ">
-      {data.map(card=>{
-        return <FeedCard key={card.name} {...card} />
+    <div
+      onWheel={onScrolling}
+      ref={grpRef}
+      className="flex w-screen mt-4 overflow-x-scroll pb-2"
+    >
+      {data.map((card) => {
+        return <FeedCard key={card.name} {...card} />;
       })}
     </div>
   );

@@ -1,6 +1,14 @@
 import catchError from "@/lib/error";
 import prisma from ".";
 
+export async function getFavorite(uid:number) {
+    const query_result = prisma.favorite.findMany({
+        where: { uid }
+    });
+
+    return await catchError(query_result);
+}
+
 export async function favorite(uid: number, coin: string):Promise<Error | null> {
     const upserting = prisma.favorite.upsert({
         where: { uid_c: { uid: uid, c: coin } },

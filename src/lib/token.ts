@@ -1,5 +1,6 @@
 import { Payload } from "@/interface/token";
 import { jwtVerify, SignJWT } from "jose";
+import { cookies } from "next/headers";
 
 const secret = new TextEncoder().encode(process.env.SECRET_KEY);
 
@@ -17,4 +18,12 @@ export async function validateToken(token:string):Promise<Payload | null> {
     } catch (error) {
         return null;
     }
+}
+
+export async function getPayload():Promise<Payload | null> {
+    const ck = await cookies();
+    const token = ck.get("token");
+    if (!token) return null;
+    
+    return await validateToken(token.value);
 }
