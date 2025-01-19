@@ -1,4 +1,5 @@
 "use client";
+import { useLoader } from "@/hook/load";
 import { FeedCardProp } from "@/interface/feedcard/prop";
 import { DefaultProp } from "@/interface/page";
 import axiosCustom from "@/lib/axios";
@@ -23,9 +24,11 @@ export const DataContext = createContext<
 
 export default function DataProvider(prop: DefaultProp) {
   const [data, setData] = useState<FeedCardProp[]>([]);
+  const load = useLoader();
 
   useEffect(() => {
     const fetchData = async () => {
+      load(true);
       try {
         let fav: { [key: string]: boolean } = {};
         const res = await axiosCustom.get<{ data: { c: string }[] }>(
@@ -72,6 +75,7 @@ export default function DataProvider(prop: DefaultProp) {
       } catch (error) {
         console.error("Error fetching data:", error);
       }
+      load(false);
     };
     fetchData();
   }, []);

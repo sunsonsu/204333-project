@@ -27,7 +27,7 @@ export default function Logout() {
       }}
       className="nav-item cursor-pointer"
     >
-      Logout
+      Log Out
     </li>
   );
 }

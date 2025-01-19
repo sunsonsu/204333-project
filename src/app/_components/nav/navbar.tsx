@@ -38,7 +38,7 @@ const Navbar: React.FC = async () => {
                 href="/auth"
                 className="hover:text-yellow-300 transition duration-300"
               >
-                SignIn
+                Sign In
               </Link>
             </li>
           )}

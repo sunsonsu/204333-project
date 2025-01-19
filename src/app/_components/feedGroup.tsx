@@ -54,9 +54,6 @@ const Carousel: React.FC = () => {
       });
   };
 
-  if (!data) {
-    return <div>Loading...</div>;
-  }
   return (
     <div
       onWheel={onScrolling}

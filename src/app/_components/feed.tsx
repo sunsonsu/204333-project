@@ -1,10 +1,11 @@
 // Description: This file is about each FeedCard that will display in FeedGroup
 import { useContext, useEffect, useState } from "react";
 import { FeedCardProp } from "@/interface/feedcard/prop";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { DataContext } from "@/context/data";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import axiosCustom from "@/lib/axios";
+import { useConfirm } from "@/hook/confirm";
 
 const FeedCard: React.FC<FeedCardProp> = ({
   name,
@@ -15,6 +16,8 @@ const FeedCard: React.FC<FeedCardProp> = ({
   const [data, setData] = useContext(DataContext);
   const [base, setBase] = useState<FeedCardProp | null>(null);
   const sp = useSearchParams();
+  const confirm = useConfirm();
+  const { replace } = useRouter();
 
   useEffect(() => {
     const b = sp.get("base") || "usd";
@@ -23,7 +26,7 @@ const FeedCard: React.FC<FeedCardProp> = ({
     );
     if (!base_late) return () => {};
     setBase(base_late);
-  }, []);
+  }, [sp]);
 
   async function onFavorite() {
     const res = await axiosCustom.post(
@@ -42,6 +45,13 @@ const FeedCard: React.FC<FeedCardProp> = ({
           }
           return d;
         });
+      });
+    } else if (res.status === 401) {
+      confirm({
+        text: "You haven't signed in. Please sign in before using favorite.",
+        fn: () => {
+          replace("/auth");
+        },
       });
     }
   }
@@ -77,11 +87,11 @@ const FeedCard: React.FC<FeedCardProp> = ({
       </p>
 
       <h1 className="text-gray-600 my-8 justify-center font-semibold text-center text-3xl">
-        {base
-          ? `${(exchange_rate / base.exchange_rate).toFixed(
+        {base && base.name !== "USD"
+          ? `${(base.exchange_rate / exchange_rate).toFixed(
               2
             )} ${base.name.toUpperCase()}`
-          : `${exchange_rate} USD`}
+          : `${exchange_rate.toFixed(2)} USD`}
       </h1>
       <p className="text-gray-600 text-center w-full text-[0.7rem]">
         {timestamp}
