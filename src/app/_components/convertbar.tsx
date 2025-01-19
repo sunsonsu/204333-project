@@ -1,47 +1,54 @@
-"use client";
-
+'use client';
+import { useContext, useDebugValue, useEffect, useMemo } from 'react';
+import { useState } from 'react';
 import { DataContext } from "@/context/data";
-import axios from "axios";
-import { useContext, useState } from "react";
+
+import { useRouter } from 'next/navigation';
+
 
 const CurrencyConverterForm = () => {
-  const [amount, setAmount] = useState("");
-  const [fromCurrency, setFromCurrency] = useState("USD");
-  const [toCurrency, setToCurrency] = useState("EUR");
-  const [error, setError] = useState("");
+  const [amount, setAmount] = useState('');
+  const [fromCurrency, setFromCurrency] = useState('THB');
+  const [toCurrency, setToCurrency] = useState('USD');
+  const [error, setError] = useState('');
   const [convertedValue, setConvertedValue] = useState<string | null>(null);
-  const data = useContext(DataContext);
+  const {replace} = useRouter();
+  useEffect(() => {replace(`?base=${fromCurrency}`)}, [fromCurrency]);
+  const [data, setData] = useContext(DataContext);
+  const rate_data = useMemo(()  => {
+    let result:{[key:string]:number} = {}
+    data.forEach((d) => {
+      result[d.name] = d.exchange_rate
+    })
+    return result
+  }, [data])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     // Validate input
     if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) {
-      setError("Please enter a valid amount");
+      setError('Please enter a valid amount');
       setConvertedValue(null);
       return;
     }
 
-    setError("");
+    setError('');
 
-    // Simulated conversion logic (replace with API or actual calculation)
-    const conversionRates: { [key: string]: number } = {
-      "USD-EUR": 0.85,
-      "EUR-USD": 1.18,
-      "USD-GBP": 0.75,
-      "GBP-USD": 1.33,
-      "USD-THB": 34.21,
-      "THB-USD": 0.029,
-    };
 
-    const conversionKey = `${fromCurrency}-${toCurrency}`;
-    const rate = conversionRates[conversionKey];
+    const calculatedRate = (fromCurrency: string, toCurrency: string, amount:number) => {
+      const fromcurr = rate_data[fromCurrency]
+      const tocurr = rate_data[toCurrency]
 
+      return (tocurr/fromcurr) * amount
+
+    }
+    
+    const rate = calculatedRate(fromCurrency, toCurrency, Number(amount))
     if (rate) {
-      const result = (Number(amount) * rate).toFixed(2);
-      setConvertedValue(`${amount} ${fromCurrency} = ${result} ${toCurrency}`);
+      setConvertedValue(`${amount} ${fromCurrency} = ${rate.toFixed(2)} ${toCurrency}`);
     } else {
-      setConvertedValue("Conversion rate not available");
+      setConvertedValue('Conversion rate not available');
     }
   };
 
@@ -58,11 +65,11 @@ const CurrencyConverterForm = () => {
           </label>
           <input
             id="amount"
-            type="number"
+            type="text"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
-            placeholder="$"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder={`${fromCurrency}`}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
         </div>
@@ -81,19 +88,27 @@ const CurrencyConverterForm = () => {
               id="fromCurrency"
               value={fromCurrency}
               onChange={(e) => setFromCurrency(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="USD">USD - US Dollar</option>
-              <option value="EUR">EUR - Euro</option>
-              <option value="GBP">GBP - British Pound</option>
-              <option value="THB">THB - Thai Baht</option>
+              {Object.keys(rate_data).map((key)=>{return <option key={key} value={key}>{key}</option>})}
+
             </select>
           </div>
 
-          {/* Switch Icon */}
-          <div className="flex items-center justify-center">
-            <span className="text-2xl text-gray-500">⇄</span>
-          </div>
+            {/* Switch Icon */}
+            <div className="flex items-center justify-center">
+            <button
+              type="button"
+              className="text-2xl text-gray-500"
+              onClick={() => {
+              const temp = fromCurrency;
+              setFromCurrency(toCurrency);
+              setToCurrency(temp);
+              }}
+            >
+              ⇄
+            </button>
+            </div>
 
           {/* To Currency */}
           <div className="flex-1">
@@ -107,12 +122,9 @@ const CurrencyConverterForm = () => {
               id="toCurrency"
               value={toCurrency}
               onChange={(e) => setToCurrency(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md text-black focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              <option value="USD">USD - US Dollar</option>
-              <option value="EUR">EUR - Euro</option>
-              <option value="GBP">GBP - British Pound</option>
-              <option value="THB">THB - Thai Baht</option>
+              {Object.keys(rate_data).map((key)=>{return <option key={key} value={key}>{key}</option>})}
             </select>
           </div>
         </div>
@@ -129,9 +141,7 @@ const CurrencyConverterForm = () => {
       {/* Display Conversion Result */}
       {convertedValue && (
         <div className="mt-6 bg-gray-50 p-4 rounded-md shadow">
-          <p className="text-lg font-semibold text-gray-800">
-            {convertedValue}
-          </p>
+          <p className="text-lg font-semibold text-gray-800">{convertedValue}</p>
         </div>
       )}
     </div>
