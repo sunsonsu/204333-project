@@ -10,7 +10,7 @@ import FeedCard from "./feed";
 import { DataContext } from "@/context/data";
 
 const Carousel: React.FC = () => {
-  const data = useContext(DataContext);
+  const [data, setData] = useContext(DataContext);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const grpRef = useRef<HTMLDivElement | null>(null);
   const [beforeScroll, setBeforeScroll] = useState(-1);

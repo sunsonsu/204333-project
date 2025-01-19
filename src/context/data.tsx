@@ -62,7 +62,7 @@ export default function DataProvider(prop: DefaultProp) {
           setData(
             feedCards.map((f) => {
               let new_f: FeedCardProp = { ...f };
-              if (fav[f.exchange_rate]) {
+              if (fav[f.name]) {
                 new_f.fav = true;
               }
               return new_f;

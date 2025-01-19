@@ -3,7 +3,7 @@ import prisma from ".";
 
 export async function getFavorite(uid:number) {
     const query_result = prisma.favorite.findMany({
-        where: { uid }
+        where: { uid, deletedAt: null }
     });
 
     return await catchError(query_result);

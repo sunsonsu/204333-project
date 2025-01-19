@@ -4,6 +4,7 @@ import { FeedCardProp } from "@/interface/feedcard/prop";
 import { useSearchParams } from "next/navigation";
 import { DataContext } from "@/context/data";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import axiosCustom from "@/lib/axios";
 
 const FeedCard: React.FC<FeedCardProp> = ({
   name,
@@ -23,6 +24,48 @@ const FeedCard: React.FC<FeedCardProp> = ({
     if (!base_late) return () => {};
     setBase(base_late);
   }, []);
+
+  async function onFavorite() {
+    const res = await axiosCustom.post(
+      "/api/favorite",
+      { c: name },
+      {
+        withCredentials: true,
+      }
+    );
+
+    if (res.status === 200) {
+      setData((p) => {
+        return p.map((d) => {
+          if (d.name === name) {
+            return { ...d, fav: true };
+          }
+          return d;
+        });
+      });
+    }
+  }
+
+  async function onUnfavorite() {
+    const res = await axiosCustom.delete(`/api/favorite?c=${name}`, {
+      withCredentials: true,
+    });
+
+    if (res.status === 200) {
+      setData((p) => {
+        return p.map((d) => {
+          if (d.name === name) {
+            return {
+              name: d.name,
+              exchange_rate: d.exchange_rate,
+              timestamp: d.timestamp,
+            };
+          }
+          return d;
+        });
+      });
+    }
+  }
 
   return (
     <div className="bg-white cursor-pointer hover:scale-[1.03] transition-all border hover:shadow-lg rounded-lg duration-300 min-w-64 h-72 py-8 px-4 m-2">
@@ -45,9 +88,19 @@ const FeedCard: React.FC<FeedCardProp> = ({
       </p>
       <div className="w-full mt-4 flex justify-center">
         {fav ? (
-          <FaHeart className="text-2xl" />
+          <FaHeart
+            onClick={() => {
+              onUnfavorite();
+            }}
+            className="text-2xl"
+          />
         ) : (
-          <FaRegHeart className="text-2xl" />
+          <FaRegHeart
+            onClick={() => {
+              onFavorite();
+            }}
+            className="text-2xl"
+          />
         )}
       </div>
     </div>
