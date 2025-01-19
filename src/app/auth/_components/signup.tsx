@@ -6,7 +6,7 @@ import axiosCustom from "@/lib/axios";
 import { formParser } from "@/lib/form";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { SyntheticEvent, useEffect, useState } from "react";
+import React, { SyntheticEvent, useState } from "react";
 
 export default function SignUp() {
   const [err, setErr] = useState<SignUpFormErr>({});

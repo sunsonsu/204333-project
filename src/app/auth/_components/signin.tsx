@@ -85,7 +85,7 @@ export default function SignIn() {
         Sign In
       </button>
       <div className="text-xs">
-        Don't have an account?{" "}
+        Don&apos;t have an account?{" "}
         <Link
           href="/auth?mode=signup"
           className="text-blue-500 font-normal underline hover:text-blue-600 hover:font-bold"

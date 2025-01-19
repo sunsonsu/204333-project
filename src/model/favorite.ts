@@ -19,8 +19,8 @@ export async function favorite(uid: number, coin: string):Promise<Error | null> 
         }
     });
 
-    const [_, err_update] = await catchError(upserting);
-    return err_update;
+    const err_update = await catchError(upserting);
+    return err_update[1];
 }
 
 export async function unfavorite(uid: number, coin: string):Promise<Error | null> {
@@ -29,6 +29,6 @@ export async function unfavorite(uid: number, coin: string):Promise<Error | null
         data: { deletedAt: new Date() }
     });
 
-    const [_, err_update] = await catchError(update);
-    return err_update;
+    const err_update = await catchError(update);
+    return err_update[1];
 }

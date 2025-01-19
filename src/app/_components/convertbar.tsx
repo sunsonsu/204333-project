@@ -1,54 +1,61 @@
-'use client';
-import { useContext, useDebugValue, useEffect, useMemo } from 'react';
-import { useState } from 'react';
+"use client";
+import { useContext, useEffect, useMemo } from "react";
+import { useState } from "react";
 import { DataContext } from "@/context/data";
 
-import { useRouter } from 'next/navigation';
-
+import { useRouter } from "next/navigation";
 
 const CurrencyConverterForm = () => {
-  const [amount, setAmount] = useState('');
-  const [fromCurrency, setFromCurrency] = useState('THB');
-  const [toCurrency, setToCurrency] = useState('USD');
-  const [error, setError] = useState('');
+  const [amount, setAmount] = useState("");
+  const [fromCurrency, setFromCurrency] = useState("THB");
+  const [toCurrency, setToCurrency] = useState("USD");
+  const [error, setError] = useState("");
   const [convertedValue, setConvertedValue] = useState<string | null>(null);
-  const {replace} = useRouter();
-  useEffect(() => {replace(`?base=${fromCurrency}`)}, [fromCurrency]);
-  const [data, setData] = useContext(DataContext);
-  const rate_data = useMemo(()  => {
-    let result:{[key:string]:number} = {}
+  const { replace } = useRouter();
+  const [data] = useContext(DataContext);
+
+  useEffect(() => {
+    replace(`?base=${fromCurrency}`);
+  }, [fromCurrency]);
+
+  const rate_data = useMemo(() => {
+    const result: { [key: string]: number } = {};
     data.forEach((d) => {
-      result[d.name] = d.exchange_rate
-    })
-    return result
-  }, [data])
+      result[d.name] = d.exchange_rate;
+    });
+    return result;
+  }, [data]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     // Validate input
     if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) {
-      setError('Please enter a valid amount');
+      setError("Please enter a valid amount");
       setConvertedValue(null);
       return;
     }
 
-    setError('');
+    setError("");
 
+    const calculatedRate = (
+      fromCurrency: string,
+      toCurrency: string,
+      amount: number
+    ) => {
+      const fromcurr = rate_data[fromCurrency];
+      const tocurr = rate_data[toCurrency];
 
-    const calculatedRate = (fromCurrency: string, toCurrency: string, amount:number) => {
-      const fromcurr = rate_data[fromCurrency]
-      const tocurr = rate_data[toCurrency]
+      return (tocurr / fromcurr) * amount;
+    };
 
-      return (tocurr/fromcurr) * amount
-
-    }
-    
-    const rate = calculatedRate(fromCurrency, toCurrency, Number(amount))
+    const rate = calculatedRate(fromCurrency, toCurrency, Number(amount));
     if (rate) {
-      setConvertedValue(`${amount} ${fromCurrency} = ${rate.toFixed(2)} ${toCurrency}`);
+      setConvertedValue(
+        `${amount} ${fromCurrency} = ${rate.toFixed(2)} ${toCurrency}`
+      );
     } else {
-      setConvertedValue('Conversion rate not available');
+      setConvertedValue("Conversion rate not available");
     }
   };
 
@@ -90,25 +97,30 @@ const CurrencyConverterForm = () => {
               onChange={(e) => setFromCurrency(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              {Object.keys(rate_data).map((key)=>{return <option key={key} value={key}>{key}</option>})}
-
+              {Object.keys(rate_data).map((key) => {
+                return (
+                  <option key={key} value={key}>
+                    {key}
+                  </option>
+                );
+              })}
             </select>
           </div>
 
-            {/* Switch Icon */}
-            <div className="flex items-center justify-center">
+          {/* Switch Icon */}
+          <div className="flex items-center justify-center">
             <button
               type="button"
               className="text-2xl text-gray-500"
               onClick={() => {
-              const temp = fromCurrency;
-              setFromCurrency(toCurrency);
-              setToCurrency(temp);
+                const temp = fromCurrency;
+                setFromCurrency(toCurrency);
+                setToCurrency(temp);
               }}
             >
               ⇄
             </button>
-            </div>
+          </div>
 
           {/* To Currency */}
           <div className="flex-1">
@@ -124,7 +136,13 @@ const CurrencyConverterForm = () => {
               onChange={(e) => setToCurrency(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
-              {Object.keys(rate_data).map((key)=>{return <option key={key} value={key}>{key}</option>})}
+              {Object.keys(rate_data).map((key) => {
+                return (
+                  <option key={key} value={key}>
+                    {key}
+                  </option>
+                );
+              })}
             </select>
           </div>
         </div>
@@ -141,7 +159,9 @@ const CurrencyConverterForm = () => {
       {/* Display Conversion Result */}
       {convertedValue && (
         <div className="mt-6 bg-gray-50 p-4 rounded-md shadow">
-          <p className="text-lg font-semibold text-gray-800">{convertedValue}</p>
+          <p className="text-lg font-semibold text-gray-800">
+            {convertedValue}
+          </p>
         </div>
       )}
     </div>

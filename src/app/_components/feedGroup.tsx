@@ -10,10 +10,10 @@ import FeedCard from "./feed";
 import { DataContext } from "@/context/data";
 
 const Carousel: React.FC = () => {
-  const [data, setData] = useContext(DataContext);
+  const [data] = useContext(DataContext);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const grpRef = useRef<HTMLDivElement | null>(null);
-  const [beforeScroll, setBeforeScroll] = useState(-1);
+  const beforeScroll = useState(-1);
 
   useEffect(() => {
     intervalRef.current = setInterval(scrolling, 5000);
@@ -24,7 +24,7 @@ const Carousel: React.FC = () => {
   }, []);
 
   function scrolling() {
-    setBeforeScroll((pre) => {
+    beforeScroll[1]((pre) => {
       if (!grpRef.current) return -1;
       if (pre === grpRef.current.scrollLeft) {
         grpRef.current.scroll({
@@ -54,6 +54,9 @@ const Carousel: React.FC = () => {
       });
   };
 
+  if (data.length === 0) {
+    return <div>Loading...</div>;
+  }
   return (
     <div
       onWheel={onScrolling}

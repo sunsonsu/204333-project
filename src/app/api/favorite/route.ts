@@ -4,14 +4,13 @@ import { favorite, getFavorite, unfavorite } from "@/model/favorite";
 import { NextRequest } from "next/server";
 import { z } from "zod";
 
-export async function GET(req:NextRequest) {
+export async function GET() {
     const payload = await getPayload();
     if (!payload) return Json({ message: "NOT_SIGN_IN" }, 401);
     
     const [fav, err] = await getFavorite(payload.id);
     if (err) return Json({ message: err }, 500);
 
-    console.log(fav);
     return Json({ data: fav });
 }
 

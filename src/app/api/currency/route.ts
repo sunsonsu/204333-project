@@ -1,5 +1,5 @@
 import axios from "axios";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
 
@@ -10,7 +10,7 @@ interface ResponseData {
   rates: { [key: string]: number }
 }
 
-export async function GET(req:NextRequest) {
+export async function GET() {
     // get data from api and store in database with prisma
     type RateData = {
         coin: string;
@@ -61,6 +61,7 @@ export async function GET(req:NextRequest) {
         return NextResponse.json({api_data}, { status:200 })
     }
         } catch (error) {
+          console.error(error);
         const db_data = await prisma.exchangeRate.findMany();
 
         return NextResponse.json({rates:db_data});

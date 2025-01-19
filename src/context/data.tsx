@@ -30,7 +30,7 @@ export default function DataProvider(prop: DefaultProp) {
     const fetchData = async () => {
       load(true);
       try {
-        let fav: { [key: string]: boolean } = {};
+        const fav: { [key: string]: boolean } = {};
         const res = await axiosCustom.get<{ data: { c: string }[] }>(
           "/api/favorite",
           { withCredentials: true }
@@ -64,7 +64,7 @@ export default function DataProvider(prop: DefaultProp) {
           });
           setData(
             feedCards.map((f) => {
-              let new_f: FeedCardProp = { ...f };
+              const new_f: FeedCardProp = { ...f };
               if (fav[f.name]) {
                 new_f.fav = true;
               }

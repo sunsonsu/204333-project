@@ -14,8 +14,8 @@ export async function register(email:string, password:string, name:string):Promi
         }
     });
 
-    const [_, err_create] = await catchError(pm);
-    return err_create;
+    const err_create = await catchError(pm);
+    return err_create[1];
 }
 
 export async function login(email:string, password:string):Promise<[number, null] | [null, Error]> {
@@ -32,7 +32,7 @@ export async function login(email:string, password:string):Promise<[number, null
         where: { email },
         data: { lastLogin: new Date() }
     });
-    const [_, err_update] = await catchError(p_update);
-    if (err_update) return [null, err_update];
+    const err_update = await catchError(p_update);
+    if (err_update[1]) return [null, err_update[1]];
     return [uinfo.id, null];
 }

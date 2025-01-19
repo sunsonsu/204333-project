@@ -16,6 +16,7 @@ export async function validateToken(token:string):Promise<Payload | null> {
         const new_payload = payload as Payload
         return new_payload;
     } catch (error) {
+        console.error(error);
         return null;
     }
 }
