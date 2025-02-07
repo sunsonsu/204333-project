@@ -15,39 +15,41 @@ const Navbar: React.FC = async () => {
   }
 
   return (
-    <nav className="bg-dark-blue text-yellow-500 shadow-md py-3 px-6">
-      <div className="flex justify-between items-center max-w-7xl mx-auto">
-        {/* Brand */}
-        <div className="text-2xl font-bold ml-2">Currency Exchange</div>
+    <nav className=" text-blue-700 shadow-md py-3 px-6">
+      <div className="flex p-1 ">
+
+      {/* Brand */}
+        <p className="text-2xl font-bold ml-2 ">Currency Exchange</p>
 
         {/* Navigation Links */}
-        <ul className="hidden md:flex space-x-6">
-          <li className="nav-item">
-            <Link
-              href="/"
-              className="hover:text-yellow-300 transition duration-300"
-            >
-              Home
-            </Link>
-          </li>
-          {isAuthened ? (
-            <Logout />
-          ) : (
+        <div className="flex-grow"></div>
+          <ul className="hidden md:flex space-x-6">
             <li className="nav-item">
               <Link
-                href="/auth"
-                className="hover:text-yellow-300 transition duration-300"
+                href="/"
+                className="hover:text-yellow-400 transition duration-300"
               >
-                Sign In
+                Home
               </Link>
             </li>
-          )}
-        </ul>
+            {isAuthened ? (
+              <Logout />
+            ) : (
+              <li className="nav-item">
+                <Link
+            href="/auth"
+            className="hover:text-yellow-400 transition duration-300"
+                >
+            Sign In
+                </Link>
+              </li>
+            )}
+          </ul>
 
-        {/* Mobile Menu Icon */}
-        <div className="md:hidden text-yellow-500 text-3xl cursor-pointer">
-          ☰
-        </div>
+          {/* Mobile Menu Icon */}
+          <div className="md:hidden text-blue-700 text-3xl cursor-pointer">
+            ☰
+          </div>
       </div>
     </nav>
   );

@@ -83,13 +83,12 @@ const FeedCard: React.FC<FeedCardProp> = ({
         {name}
       </h2>
       <p className="w-full text-center text-[0.7rem] text-gray-500">
-        compare with {base ? base.name.toUpperCase() : "USD"}
+      1 {name} compare with {base ? base.name.toUpperCase() : "USD"}
       </p>
 
       <h1 className="text-gray-600 my-8 justify-center font-semibold text-center text-3xl">
         {base
-          ? `${(base.exchange_rate / exchange_rate).toFixed(2)} ${name}`
-          : `${exchange_rate.toFixed(2)} ${name}`}
+          ? `${(base.exchange_rate / exchange_rate).toFixed(2)} ${base.name}`: `${exchange_rate.toFixed(2)} ${name}`}
       </h1>
       <p className="text-gray-600 text-center w-full text-[0.7rem]">
         {timestamp}
