@@ -1,4 +1,3 @@
 node_modules/
 dist/
-postgres-data/
-.env
+nodemon.json
