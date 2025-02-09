@@ -1,0 +1,4 @@
+postgres-data/
+.next/
+kubernetes/
+node_modules/

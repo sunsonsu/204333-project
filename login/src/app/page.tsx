@@ -9,9 +9,9 @@ interface SearchPageProps {
   }>;
 }
 
-export const metadata:Metadata = {
-  title: "Sign In/Up page"
-}
+export const metadata: Metadata = {
+  title: "Sign In/Up page",
+};
 
 export default async function page({ searchParams }: SearchPageProps) {
   const sr = await searchParams;
