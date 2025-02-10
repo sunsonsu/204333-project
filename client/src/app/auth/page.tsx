@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default async function page({ searchParams }: SearchPageProps) {
     const sr = await searchParams;
     return (
-        <main className="w-full min-h-screen flex justify-center items-center">
+        <main className="w-full min-h-screen flex justify-center items-center p-4">
             {sr.mode === "signup" ? <SignUp /> : <SignIn />}
         </main>
     );

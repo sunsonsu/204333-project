@@ -13,7 +13,7 @@ const schema = z.object({
 export default async function(req:Request, res:Response) {
     const body = schema.safeParse(req.body);
     if (body.error) {
-        res.status(404).json({ message: body.error });
+        res.status(400).json({ message: body.error });
         return;
     }
 

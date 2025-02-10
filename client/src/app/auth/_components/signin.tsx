@@ -55,9 +55,9 @@ export default function SignIn() {
     return (
         <form
             onSubmit={onLogin}
-            className="p-8 rounded-md border flex flex-col items-center gap-8 border-gray-500 max-w-sm w-full"
+            className="p-8 rounded-md border flex text-white flex-col items-center gap-8 border-gray-500 max-w-sm w-full"
         >
-            <h1 className="text-3xl font-semibold">Sign In</h1>
+            <h1 className="text-4xl font-semibold">Sign In</h1>
             <div className="w-full">
                 <input
                     type="text"
@@ -84,18 +84,30 @@ export default function SignIn() {
             </div>
             <button
                 type="submit"
-                className="border text-xl px-2 py-1 rounded-md hover:bg-foreground hover:text-background"
+                className="border text-xl font-semibold px-2 py-1 rounded-md hover:bg-white/5 hover:text-background"
             >
                 Sign In
             </button>
-            <div className="text-xs">
-                Don&apos;t have an account?{" "}
-                <Link
-                    href="/auth?mode=signup"
-                    className="text-blue-500 font-normal underline hover:text-blue-600 hover:font-bold"
-                >
-                    Sign Up
-                </Link>
+            <div className="text-xs text-center">
+                <div>
+                    Don&apos;t have an account?{" "}
+                    <Link
+                        href="/auth?mode=signup"
+                        className="text-blue-500 font-normal underline hover:text-blue-600 hover:font-bold"
+                    >
+                        Sign Up
+                    </Link>
+                </div>
+                <div className="text-xs">
+                    Back to{" "}
+                    <Link
+                        href="/"
+                        className="text-blue-500 font-normal underline hover:text-blue-600 hover:font-bold"
+                    >
+                        home page
+                    </Link>
+                    ?
+                </div>
             </div>
         </form>
     );

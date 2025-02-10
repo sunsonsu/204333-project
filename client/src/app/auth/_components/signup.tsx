@@ -52,7 +52,7 @@ export default function SignUp() {
     return (
         <form
             onSubmit={onSignUp}
-            className="p-8 rounded-md border flex flex-col items-center gap-8 border-gray-500 max-w-sm w-full"
+            className="p-8 rounded-md border flex text-white flex-col items-center gap-8 border-gray-500 max-w-sm w-full"
         >
             <h1 className="text-3xl font-semibold">Sign Up</h1>
             <div className="w-full">
@@ -105,17 +105,29 @@ export default function SignUp() {
                     </p>
                 )}
             </div>
-            <button className="border text-xl px-2 py-1 rounded-md hover:bg-foreground hover:text-background">
+            <button className="border text-xl font-semibold px-2 py-1 rounded-md hover:bg-white/5 hover:text-background">
                 Sign Up
             </button>
-            <div className="text-xs">
-                Already have an account?{" "}
-                <Link
-                    href="/auth?mode=signin"
-                    className="text-blue-500 font-normal underline hover:text-blue-600 hover:font-bold"
-                >
-                    Sign In
-                </Link>
+            <div className="text-xs text-center">
+                <div>
+                    Already have an account?{" "}
+                    <Link
+                        href="/auth?mode=signin"
+                        className="text-blue-500 font-normal underline hover:text-blue-600 hover:font-bold"
+                    >
+                        Sign In
+                    </Link>
+                </div>
+                <div>
+                    Back to{" "}
+                    <Link
+                        href="/"
+                        className="text-blue-500 font-normal underline hover:text-blue-600 hover:font-bold"
+                    >
+                        home page
+                    </Link>
+                    ?
+                </div>
             </div>
         </form>
     );

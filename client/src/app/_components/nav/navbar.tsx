@@ -9,33 +9,39 @@ const Navbar: React.FC = async () => {
     const token = ck.get("connect.sid");
 
     return (
-        <nav className=" text-blue-700 shadow-md py-3 px-6">
-            <div className="flex p-1 ">
+        <nav className="text-white w-full">
+            <div className="w-full max-w-screen-xl mx-auto flex items-stretch">
                 {/* Brand */}
-                <p className="text-2xl font-bold ml-2 ">Currency Exchange</p>
+                <Link href={"/"}>
+                    <p className="text-3xl font-bold ml-2 p-4">
+                        Currency Exchange
+                    </p>
+                </Link>
 
                 {/* Navigation Links */}
                 <div className="flex-grow"></div>
-                <ul className="hidden md:flex space-x-6">
-                    <li className="nav-item">
-                        <Link
-                            href="/"
-                            className="hover:text-yellow-400 transition duration-300"
-                        >
-                            Home
-                        </Link>
-                    </li>
+                <ul className="hidden md:flex items-stretch text-[1.05rem] font-semibold">
+                    <Link
+                        href="/"
+                        className="hover:text-yellow-400 transition duration-300 flex items-center justify-center"
+                    >
+                        <li className="nav-item px-6">Home</li>
+                    </Link>
+                    <Link
+                        href="/comment"
+                        className="hover:text-yellow-400 transition duration-300 flex items-center justify-center"
+                    >
+                        <li className="nav-item px-6">Comment</li>
+                    </Link>
                     {token ? (
                         <Logout />
                     ) : (
-                        <li className="nav-item">
-                            <Link
-                                href="/auth"
-                                className="hover:text-yellow-400 transition duration-300"
-                            >
-                                Sign In
-                            </Link>
-                        </li>
+                        <Link
+                            href="/auth"
+                            className="hover:text-yellow-400 transition duration-300 flex items-center justify-center"
+                        >
+                            <li className="nav-item px-6">Sign In</li>
+                        </Link>
                     )}
                 </ul>
 
