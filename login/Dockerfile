@@ -13,24 +13,18 @@ FROM base AS builder
 
 WORKDIR /app
 COPY --from=depens /app/node_modules ./node_modules
-
 COPY . .
-
-# RUN npm install -g npm@11.1.0
 
 RUN npm run build
 
 FROM base AS runner
 
 WORKDIR /app
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/.env ./.env
+COPY --from=builder /app/node_modules ./node_modules
 
-# COPY --from=builder /app/public ./public
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
+ENV PORT=3002
 
-ENV PORT=3000
-EXPOSE 3000
+CMD [ "node", "dist/index.js" ]
 
-ENV HOSTNAME="0.0.0.0"
-
-CMD [ "node", "server.js" ]

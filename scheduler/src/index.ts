@@ -1,3 +1,4 @@
+import "./config";
 import Express from "express";
 import redis from "./lib/cache";
 import GetAPI from "./lib/api";
