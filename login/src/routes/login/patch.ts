@@ -38,7 +38,6 @@ export default async function (req:Request, res:Response) {
         if (err_update) console.log("Update Last Login Error:", err_update);
         
         req.session.user_id = user.id;
-        console.log("Set A Session")
         res.status(200).json({ message: "success." });
         return;
     }

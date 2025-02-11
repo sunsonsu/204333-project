@@ -23,7 +23,7 @@ export default function Logout() {
             onClick={() => {
                 onLogout();
             }}
-            className="nav-item cursor-pointer"
+            className="hover:text-yellow-400 transition duration-300 flex items-center justify-center cursor-pointer px-6"
         >
             Log Out
         </li>
