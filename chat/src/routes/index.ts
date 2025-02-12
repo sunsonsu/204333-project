@@ -6,7 +6,8 @@ const prisma = new PrismaClient();
 
 //for getting the specific chat data
 router.get("/api/chat/:curr", async (req, res) => {
-    const curr = req.params.curr
+    const curr = (req.params.curr).toLocaleUpperCase()
+    
     // console.log(curr)
     try {
         const users = await prisma.exchangeRate.findUnique({
@@ -24,11 +25,13 @@ router.get("/api/chat/:curr", async (req, res) => {
 //for posting new comment to the specific chat
 router.post("/api/chat/:curr", async (req, res) => {
     const curr = req.params.curr
-    const { message } = req.body;
+    // console.log(req.body)
+    const { message} = req.body;
+
     try {
         const comment = await prisma.chat.create({
             data: {
-            uid:req.session.user_id as number,
+            uid: 1, //req.session.user_id as number
             msg: message as string,
             c: curr as string
             }
