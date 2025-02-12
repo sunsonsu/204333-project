@@ -27,7 +27,7 @@ const Navbar: React.FC = () => {
                         <li className="nav-item px-6">Home</li>
                     </Link>
                     <Link
-                        href="/comment"
+                        href="/chat"
                         className="hover:text-yellow-400 transition duration-300 flex items-center justify-center"
                     >
                         <li className="nav-item px-6">Comment</li>
