@@ -44,8 +44,15 @@ export default function Carousal() {
         }
     }, [params]);
 
+    function onEditFav(coin: string, status: boolean) {
+        setData((p) => {
+            return p.map((r) => (r.name === coin ? { ...r, fav: status } : r));
+        });
+    }
+
     return (
         <section className="w-full relative min-h-80 max-w-screen-xl mx-auto p-4">
+            <hr className="my-4" />
             <div className="w-full overflow-hidden">
                 <div
                     className="w-1/5 max-xl:w-1/4 max-lg:w-1/3 max-md:w-1/2 max-sm:w-full h-80 top-0 relative transition-all"
@@ -53,6 +60,7 @@ export default function Carousal() {
                 >
                     {data.map((d, index) => (
                         <Card
+                            favFunc={onEditFav}
                             key={d.name}
                             index={index}
                             {...d}

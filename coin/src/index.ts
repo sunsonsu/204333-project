@@ -1,9 +1,9 @@
 import "./config";
 import Express from "express";
-import redis from "./lib/cache";
 import router from "./routes";
 import Cors from "cors";
 import session from "./lib/session";
+import redis from "./lib/cache";
 
 const app = Express();
 
@@ -23,6 +23,6 @@ if (process.env.NODE_ENV !== "production") {
 app.use(router);
 
 app.listen(PORT, async ()=>{
-    await redis.connect();
+    await redis.connect()
     console.log(`Server is running on port ${PORT}.`);
 });

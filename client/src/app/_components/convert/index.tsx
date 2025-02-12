@@ -4,6 +4,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 import { DataContext } from "@/context/data";
 import { RiArrowUpDownFill } from "react-icons/ri";
+import { isNumber } from "@/lib/general";
+import Link from "next/link";
 
 export default function Convertor() {
     const [rate, setRate] = useContext(DataContext);
@@ -11,6 +13,7 @@ export default function Convertor() {
     const [to, setTo] = useState(rate.length > 0 ? rate[0].name : "");
     const param = useSearchParams();
     const { replace } = useRouter();
+    const [fromInput, setFromInput] = useState<string>("");
 
     useEffect(() => {
         const p_from = param.get("from");
@@ -28,6 +31,10 @@ export default function Convertor() {
         }
     }, [param]);
 
+    useEffect(() => {
+        setTo((p) => (p === "" ? (rate.length > 0 ? rate[0].name : "") : p));
+    }, [rate]);
+
     function onChangeSelect(from: string | null, to: string | null) {
         const p_from = param.get("from");
         const p_to = param.get("to");
@@ -39,6 +46,14 @@ export default function Convertor() {
             if (p_from) replace(`/?from=${p_from}&to=${to}`);
             else replace(`/?to=${to}`);
         }
+    }
+
+    function calTo(_in: string, _to: string, _from: string) {
+        const num = isNumber(_in) ? Number(_in) : 0;
+        const to_info = rate.find((r) => r.name === _to);
+        const from_info = rate.find((r) => r.name === _from);
+        if (!to_info || !from_info) return 0;
+        return (to_info.rate / from_info.rate) * num;
     }
 
     return (
@@ -66,12 +81,17 @@ export default function Convertor() {
             </div>
             <input
                 type="text"
-                className="outline-none bg-black/0 text-2xl border-b p-1 px-2 border-white focus:border-b-2"
-                onChange={numberOnly}
+                className="outline-none text-yellow-300 bg-black/0 text-center text-3xl my-4 border-b p-1 px-2 border-white focus:border-b-2"
+                onChange={(e) => {
+                    numberOnly(e);
+                    setFromInput(e.target.value);
+                }}
                 id="from"
                 placeholder="Number"
             />
-            <RiArrowUpDownFill className="text-white my-4 text-4xl cursor-pointer hover:text-yellow-200 transition-all" />
+            <Link href={`/?from=${to}&to=${from}`}>
+                <RiArrowUpDownFill className="text-white my-4 text-4xl cursor-pointer hover:text-yellow-200 transition-all" />
+            </Link>
             <div className="flex items-center  w-fit">
                 <label
                     htmlFor="from"
@@ -93,6 +113,9 @@ export default function Convertor() {
                     ))}
                 </select>
             </div>
+            <p className="mt-4 text-5xl font-bold text-green-500">
+                {Number(calTo(fromInput, to, from).toFixed(2))}
+            </p>
         </section>
     );
 }

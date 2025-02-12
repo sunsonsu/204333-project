@@ -1,10 +1,17 @@
-import { Request, Response } from "express";
-import Session from "express-session";
+import session from "express-session";
+import redis from "../cache";
+import { RedisStore } from "connect-redis";
 
-const session = Session({
+const redisStore = new RedisStore({
+    client: redis,
+    prefix: "myapp:"
+})
+
+const sessionMiddleware = session({
+    store: redisStore,
     secret: process.env.SECRET_KEY || "",
     resave: true,
     saveUninitialized: true,
 })
 
-export default session;
+export default sessionMiddleware;

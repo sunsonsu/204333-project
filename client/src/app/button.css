@@ -17,3 +17,8 @@ button.b {
     background: rgb(0,8,74);
     background: linear-gradient(90deg, rgba(0,8,74,1) 0%, rgba(0,40,255,1) 100%);
 }
+
+button.bl {
+    background-color: black;
+    color: white;
+}

@@ -4,6 +4,7 @@ import "./globals.css";
 import "./button.css";
 import UtilProvider from "@/context/util/combine";
 import SessionProvider from "@/context/session";
+import SignInProvider from "@/context/login";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -31,7 +32,9 @@ export default function RootLayout({
                 className={`${geistSans.variable} ${geistMono.variable} antialiased`}
             >
                 <SessionProvider>
-                    <UtilProvider>{children}</UtilProvider>
+                    <UtilProvider>
+                        <SignInProvider>{children}</SignInProvider>
+                    </UtilProvider>
                 </SessionProvider>
             </body>
         </html>
