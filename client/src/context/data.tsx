@@ -1,7 +1,7 @@
 "use client";
 import { useLoader } from "@/hook/load";
+import { useSession } from "@/hook/session";
 import Coin from "@/interface/coin";
-import { FeedCardProp } from "@/interface/feedcard/prop";
 import { DefaultProp } from "@/interface/page";
 import { axiosCoin } from "@/lib/axios";
 
@@ -16,7 +16,7 @@ import React, {
 // Type & Interface
 interface CoinInterface {
     message: string;
-    data: { [key: string]: { rate: number; updatedAt: Date } };
+    data: { [key: string]: number };
 }
 
 interface FavoriteInterface {
@@ -31,6 +31,7 @@ export const DataContext = createContext<
 
 export default function DataProvider(prop: DefaultProp) {
     const [data, setData] = useState<Coin[]>([]);
+    const [auth, setAuth] = useSession();
     const load = useLoader();
 
     useEffect(() => {
@@ -47,6 +48,7 @@ export default function DataProvider(prop: DefaultProp) {
                         fav[d] = true;
                     });
                 }
+                if (res.status === 401) setAuth(() => false);
 
                 const response = await axiosCoin.get<CoinInterface>("/coin");
                 if (response.status === 200) {
@@ -54,7 +56,7 @@ export default function DataProvider(prop: DefaultProp) {
                     const coins_data = Object.keys(rates).map((key) => {
                         return {
                             name: key,
-                            rate: rates[key].rate,
+                            rate: rates[key],
                             fav: fav[key],
                         };
                     });

@@ -28,7 +28,6 @@ export default async function(req:Request, res:Response) {
         const [_, err_cache] = await catchError(cache_promise);
         if (err_cache) console.error("Set Cache Error:", err_cache);
     } else {
-        console.log(rates);
         const exchange_rates = JSON.parse(rates);
         res.status(200).json({ message: "success.", data: exchange_rates });
     }

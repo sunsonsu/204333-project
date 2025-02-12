@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 import Session from "express-session";
 
 const session = Session({

@@ -1,12 +1,11 @@
+"use client";
 import Link from "next/link";
 import React from "react";
 import Logout from "./logout";
-import { cookies } from "next/headers";
-import { validateToken } from "@/lib/token";
+import { useSession } from "@/hook/session";
 
-const Navbar: React.FC = async () => {
-    const ck = await cookies();
-    const token = ck.get("connect.sid");
+const Navbar: React.FC = () => {
+    const [auth] = useSession();
 
     return (
         <nav className="text-white w-full">
@@ -33,7 +32,7 @@ const Navbar: React.FC = async () => {
                     >
                         <li className="nav-item px-6">Comment</li>
                     </Link>
-                    {token ? (
+                    {auth ? (
                         <Logout />
                     ) : (
                         <Link

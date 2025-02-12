@@ -2,6 +2,7 @@
 
 import { useHandler } from "@/hook/handle";
 import { useLoader } from "@/hook/load";
+import { useSession } from "@/hook/session";
 import { SignInForm, SignInFormError } from "@/interface/auth/signin";
 import { axiosLogin } from "@/lib/axios";
 import { formParser } from "@/lib/form";
@@ -13,6 +14,7 @@ export default function SignIn() {
     const [err, setErr] = useState<SignInFormError>({});
     const loader = useLoader();
     const { replace } = useRouter();
+    const [auth, setAuth] = useSession();
     const handler = useHandler();
 
     function onLogin(e: SyntheticEvent) {
@@ -31,6 +33,7 @@ export default function SignIn() {
             loader(false);
             switch (response.status) {
                 case 200:
+                    setAuth(true);
                     replace("/");
                     break;
                 case 404:
@@ -84,7 +87,7 @@ export default function SignIn() {
             </div>
             <button
                 type="submit"
-                className="border text-xl font-semibold px-2 py-1 rounded-md hover:bg-white/5 hover:text-background"
+                className="border text-xl bg-black/0 font-semibold px-2 py-1 rounded-md hover:bg-white/5 hover:text-background"
             >
                 Sign In
             </button>

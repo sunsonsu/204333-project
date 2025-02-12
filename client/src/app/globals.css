@@ -20,3 +20,7 @@ body {
   background: linear-gradient(140deg, rgba(0,0,0,1) 0%, rgb(0, 9, 66) 100%);
   min-height: 100vh;
 }
+
+select option {
+  max-height: 150px;
+}

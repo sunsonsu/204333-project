@@ -1,0 +1,19 @@
+button {
+    padding: 0.25rem 0.75rem;
+    min-width: 5rem;
+    border-radius: 0.275rem;
+    font-weight: bold;
+    background-color: rgb(231, 231, 231);
+    transition: transform 0.25s;
+}
+
+button:hover {
+    background-color: rgb(219, 219, 219);
+    transform: scale(1.02);
+}
+
+button.b {
+    color: white;
+    background: rgb(0,8,74);
+    background: linear-gradient(90deg, rgba(0,8,74,1) 0%, rgba(0,40,255,1) 100%);
+}

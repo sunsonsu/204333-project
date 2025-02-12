@@ -105,7 +105,7 @@ export default function SignUp() {
                     </p>
                 )}
             </div>
-            <button className="border text-xl font-semibold px-2 py-1 rounded-md hover:bg-white/5 hover:text-background">
+            <button className="border text-xl bg-black/0 font-semibold px-2 py-1 rounded-md hover:bg-white/5 hover:text-background">
                 Sign Up
             </button>
             <div className="text-xs text-center">
