@@ -13,7 +13,7 @@ const Navbar: React.FC = () => {
                 {/* Brand */}
                 <Link href={"/"}>
                     <p className="text-3xl font-bold ml-2 p-4">
-                        Currency Exchange
+                        Currency Xchange
                     </p>
                 </Link>
 

@@ -36,6 +36,7 @@ export default function RootLayout({
                         <SignInProvider>{children}</SignInProvider>
                     </UtilProvider>
                 </SessionProvider>
+                <div className="bg fixed w-full h-screen top-0 left-0"></div>
             </body>
         </html>
     );

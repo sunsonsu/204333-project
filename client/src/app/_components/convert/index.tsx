@@ -70,7 +70,7 @@ export default function Convertor() {
                     onChange={(e) => {
                         onChangeSelect(e.target.value, null);
                     }}
-                    className="bg-black/0 border-b font-semibold text-xl"
+                    className="bg-black/0 text-center border-b-2 font-semibold text-xl"
                 >
                     {rate.map((r) => (
                         <option key={r.name} value={r.name}>
@@ -104,7 +104,7 @@ export default function Convertor() {
                     onChange={(e) => {
                         onChangeSelect(null, e.target.value);
                     }}
-                    className="bg-black/0 border-b font-semibold text-xl"
+                    className="bg-black/0 text-center border-b-2 font-semibold text-xl"
                 >
                     {rate.map((r) => (
                         <option key={r.name} value={r.name}>
