@@ -1,6 +1,6 @@
 const CurrencyChatList = () => {
     const currencies = ["currency 1", "currency 2"];
-  
+      
     return (
       <div className="w-full max-w-md mx-auto mt-6 bg-gray-200 rounded-lg shadow-lg">
         {/* Header */}
