@@ -22,6 +22,7 @@ export default function SessionProvider(prop: DefaultProp) {
 
     async function checkAuthen() {
         const res = await axiosLogin.get("/", { withCredentials: true });
+        console.log(res.data);
         if (res.status === 200) setAuth(() => true);
         else setAuth(() => false);
     }

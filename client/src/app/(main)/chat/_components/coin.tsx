@@ -18,14 +18,14 @@ const coinData = () => {
   useEffect(() => {
     const fetchCurr = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/api/chat/${curr}`);
+        const response = await fetch(`http://localhost:3004/api/chat/${curr}`);
         
         if (!response.ok) {
           throw new Error('Response was not ok');
         }
 
-        const result: CoinData = await response.json();
-        setData(result);
+        const result = await response.json();
+        setData(result.rate);
       } catch (error: any) {
         setError(error.message);
       } finally {
@@ -61,4 +61,3 @@ const coinData = () => {
 };
 
 export default coinData;
-
