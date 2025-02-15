@@ -2,6 +2,7 @@
 import { useLoader } from "@/hook/load";
 import { useSession } from "@/hook/session";
 import Coin from "@/interface/coin";
+import Favorite from "@/interface/favorite";
 import { DefaultProp } from "@/interface/page";
 import { axiosCoin } from "@/lib/axios";
 
@@ -21,7 +22,7 @@ interface CoinInterface {
 
 interface FavoriteInterface {
     message: string;
-    data: string[];
+    data: Favorite[];
 }
 
 // Context
@@ -45,7 +46,7 @@ export default function DataProvider(prop: DefaultProp) {
                 if (res.status === 200) {
                     const body = res.data.data;
                     body.forEach((d) => {
-                        fav[d] = true;
+                        fav[d.c] = true;
                     });
                 }
                 if (res.status === 401) setAuth(() => false);

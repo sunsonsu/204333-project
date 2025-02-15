@@ -14,7 +14,7 @@ export default async function(req:Request, res:Response) {
             return;
         }
 
-        res.status(200).json({ message: "success.", data: fav.favorite.map(f=>f.c)});
+        res.status(200).json({ message: "success.", data: fav.favorite });
     } else {
         res.status(401).json({ message: "success.", data: [] });
     }

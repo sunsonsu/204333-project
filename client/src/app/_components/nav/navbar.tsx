@@ -27,6 +27,12 @@ const Navbar: React.FC = () => {
                         <li className="nav-item px-6">Home</li>
                     </Link>
                     <Link
+                        href="/favorite"
+                        className="hover:text-yellow-400 transition duration-300 flex items-center justify-center"
+                    >
+                        <li className="nav-item px-6">Favorite</li>
+                    </Link>
+                    <Link
                         href="/chat"
                         className="hover:text-yellow-400 transition duration-300 flex items-center justify-center"
                     >
