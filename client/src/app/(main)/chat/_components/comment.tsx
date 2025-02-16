@@ -25,7 +25,7 @@ const CommentBox = () => {
 
     useEffect(() => {
 
-    const fetchCurr = async () => {
+    const fetchComment = async () => {
         try {
         const response = await axiosChat.get<ResponseApi>(`/api/chat/${curr}`);
         
@@ -41,7 +41,7 @@ const CommentBox = () => {
         }
     };
 
-    fetchCurr();
+    fetchComment();
     }, [curr]); //do this when curr change
     
     if (loading) return <p>Loading...</p>;

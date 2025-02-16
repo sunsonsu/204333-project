@@ -4,6 +4,30 @@ import { PrismaClient } from "@prisma/client";
 const router = Router();
 const prisma = new PrismaClient();
 
+//for getting all chat data with sum of each coin
+router.get("/api/chat", async (req, res) => {
+    try {
+        const chat = await prisma.chat.findMany({
+            orderBy: {
+                createdAt: 'desc'
+            }
+        });
+        const return_value: { [key: string]: number } = {};
+        for (let i = 0; i < chat.length; i++) {
+            if (!(chat[i]['c'] in return_value)) {
+                return_value[chat[i]['c']] = 1;
+            }else{
+                return_value[chat[i]['c']] += 1;
+            }
+        } 
+  
+        res.json(return_value);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "An error occurred while fetching chat" });
+    }
+});
 //for getting the specific chat data
 router.get("/api/chat/:curr", async (req, res) => {
 
