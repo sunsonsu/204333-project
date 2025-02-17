@@ -63,7 +63,7 @@ export default function Card(prop: Prop) {
         >
             <div className="w-full h-full p-4 py-6 transition-transform hover:scale-[1.02] relative shadow-md rounded-md bg-blue-950/30 flex flex-col items-center">
                 <Link
-                    href={`/coin/${prop.name}`}
+                    href={`/chat/${prop.name}`}
                     className="w-full h-full absolute top-0 left-0 z-10"
                 ></Link>
                 <h1 className="text-3xl font-bold text-white">{prop.name}</h1>

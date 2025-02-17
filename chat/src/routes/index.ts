@@ -60,7 +60,17 @@ router.get("/api/chat/:curr", async (req, res) => {
             });
             return { ...message, username: user?.name };//returning the chat data with username
         }));
-        res.json({ rate, chat: users }); //returning the rate and chat data
+
+        const uchatID = await prisma.chat.findMany({
+            where: {
+              uid: req.session.user_id as number,
+            },
+            select: {
+              cid: true
+            },
+          });
+        
+        res.json({ rate, chat: users,uchatID }); //returning the rate and chat data
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "An error occurred while fetching rate" });
@@ -71,17 +81,21 @@ router.get("/api/chat/:curr", async (req, res) => {
 router.post("/api/chat/:curr", async (req, res) => {
     const curr = req.params.curr
     // console.log(req.body)
-    const { message, uid} = req.body;
+    const { msg } = req.body;
 
     try {
+        // console.log(req.session.user_id)
+        // console.log(msg)
+        // console.log(curr)
         const comment = await prisma.chat.create({
             data: {
-            uid: uid, //change to req.session.user_id as number
-            msg: message as string,
+            uid: req.session.user_id as number, //change to req.session.user_id as number
+            msg: msg as string,
             c: curr as string
             }
         });
-        res.json(comment);
+        console.log(comment);
+        res.status(200);
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "An error occurred while fetching rate" });

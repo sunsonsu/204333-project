@@ -1,17 +1,10 @@
 'use client';
 import { axiosChat } from "@/lib/axios";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import CommentInfo from "@/interface/chat/comment";
+import PostData from "@/interface/chat/post";
 
-interface CommentInfo {
-    cid: number;
-    uid: number;
-    c: string;
-    msg: string;
-    createdAt: string;
-    deletedAt: string | null;
-    username: string;
-}
 interface ResponseApi {
    chat: CommentInfo[]
 }
@@ -22,6 +15,8 @@ const CommentBox = () => {
     const { curr } = useParams();  // 'curr' comes from the dynamic route parameter
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [msgInput, setMsgInput] = useState<string>(""); // for input message
+    const router = useRouter();
 
     useEffect(() => {
 
@@ -44,6 +39,18 @@ const CommentBox = () => {
     fetchComment();
     }, [curr]); //do this when curr change
     
+    const handlePost = async () => {
+      try {
+        const response = await axiosChat.post<PostData>(`/api/chat/${curr}`, {
+          msg: msgInput
+        }, {withCredentials: true});
+        if (response.status == 200){
+          console.log("OK")
+        }
+      } catch (error) {
+        
+      }
+    };
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
 
@@ -55,18 +62,23 @@ const CommentBox = () => {
         </div>
   
         {/* Add Comment Input */}
-        <div className="bg-gray-100 p-4 border-b">
-          <input
+        <div className="bg-gray-100 p-4 border-b flex">
+          <input  
             type="text"
             placeholder="add your comment"
-            className="w-full p-2 border rounded-md"
+            className="w-full p-2 border rounded-md flex-grow"
+            value={msgInput}
+            onChange={(e) => setMsgInput(e.target.value)}
           />
+          <button onClick={handlePost} className="ml-2 p-2 bg-blue-500 text-white rounded-md">Post</button>
         </div>
   
         {/* Comments List */}
         <div className="divide-y divide-gray-300">
           {data.map(comment => (
+
             <div key={comment.cid} className="flex justify-between items-center p-4 bg-gray-300">
+              {}
               <span className="text-gray-700 font-medium">{comment.username}</span>
               <span className="text-gray-800">{comment.msg}</span>
             </div>

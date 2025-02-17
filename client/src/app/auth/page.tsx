@@ -10,7 +10,7 @@ interface SearchPageProps {
 }
 
 export const metadata: Metadata = {
-    title: "Sign In/Up",
+    title: "Sign In/Up | Currency Xchange",
 };
 
 export default async function page({ searchParams }: SearchPageProps) {

@@ -74,7 +74,7 @@ export default function Card(prop: Prop) {
 
             <Link
                 className="w-full h-full absolute top-0 left-0"
-                href={`/coin/${prop.name}`}
+                href={`/chat/${prop.name}`}
             ></Link>
         </li>
     );

@@ -33,20 +33,17 @@ export default function ConfirmProvider(prop: DefaultProp) {
         <ConfirmContext.Provider value={onConfirm}>
             {conf.text !== "" ? (
                 <div className="fixed h-screen p-4 w-screen z-40 flex items-center justify-center bg-black/50">
-                    <div className="w-full max-w-md border border-gray-500 p-4 rounded-md bg-background">
-                        <p className="w-full text-center text-2xl font-semibold mb-4">
+                    <div className="w-full max-w-md border border-gray-500 bg-blue-950/30 p-6 rounded-md text-white">
+                        <p className="w-full text-center text-2xl font-medium mb-6">
                             {conf.text}
                         </p>
-                        <div className="text-center">
-                            <button
-                                onClick={onClickOk}
-                                className="px-3 py-1 font-semibold text-xl border border-gray-500 rounded-md text-background min-w-20 bg-foreground mr-4"
-                            >
+                        <div className="text-center text-xl">
+                            <button onClick={onClickOk} className="b mr-4">
                                 Ok
                             </button>
                             <button
                                 onClick={toDefault}
-                                className="px-3 py-1 font-semibold text-xl border border-gray-500 rounded-md text-foreground bg-background min-w-20 hover:bg-foreground hover:text-background "
+                                className="text-gray-800"
                             >
                                 Close
                             </button>

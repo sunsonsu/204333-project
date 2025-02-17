@@ -28,15 +28,15 @@ export default function AlertProvider(prop: DefaultProp) {
         <AlertContext.Provider value={onAlert}>
             {conf.text !== "" ? (
                 <div className="fixed h-screen p-4 w-screen z-40 flex items-center justify-center bg-black/50">
-                    <div className="w-full max-w-md border border-gray-500 bg-white p-4 rounded-md bg-background">
+                    <div className="w-full max-w-md border border-gray-500 bg-blue-950/30 p-6 rounded-md text-white">
                         <h1 className="text-center font-bold text-3xl">
                             Alert !!
                         </h1>
                         <p className="w-full indent-6 my-4">{conf.text}</p>
-                        <div className="text-center">
+                        <div className="text-center text-xl">
                             <button
                                 onClick={toDefault}
-                                className="px-3 py-1 font-semibold text-xl border border-gray-500 rounded-md text-foreground bg-background hover:bg-foreground hover:text-background "
+                                className="text-gray-800 mt-2"
                             >
                                 Close
                             </button>
