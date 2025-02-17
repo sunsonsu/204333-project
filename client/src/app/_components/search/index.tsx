@@ -8,12 +8,16 @@ export default function SearchCoin() {
     const [data, setData] = useContext(DataContext);
     const [show, setShow] = useState<Coin[]>([]);
     const [search, setSearch] = useState<string>("");
+    const [isFav, setIsFav] = useState<boolean>(false);
 
     useEffect(() => {
         setShow(() => {
-            return data.filter((d) => d.name.includes(search.toUpperCase()));
+            return data.filter(
+                (d) =>
+                    d.name.includes(search.toUpperCase()) && (!isFav || d.fav)
+            );
         });
-    }, [search, data]);
+    }, [search, data, isFav]);
 
     function onEditFav(coin: string, status: boolean) {
         setData((p) => {
@@ -24,15 +28,32 @@ export default function SearchCoin() {
     return (
         <section className="w-full mx-auto max-w-screen-xl p-4">
             <hr />
-            <article className="p-4">
+            <article className="flex gap-4 p-4 mt-4">
                 <input
                     onChange={(e) => {
                         setSearch(() => e.target.value);
                     }}
                     type="text"
                     placeholder="Search Currency..."
-                    className="w-full border-b mt-4 border-white bg-black/0 outline-none text-white p-1 px-2 text-xl"
+                    className="flex-grow border-b border-white bg-black/0 outline-none text-white p-1 px-2 text-xl"
                 />
+                {isFav ? (
+                    <button
+                        onClick={() => {
+                            setIsFav(false);
+                        }}
+                    >
+                        Favorite Filter: On
+                    </button>
+                ) : (
+                    <button
+                        onClick={() => {
+                            setIsFav(true);
+                        }}
+                    >
+                        Favorite Filter: Off
+                    </button>
+                )}
             </article>
             <ul className="flex flex-col gap-4 p-4">
                 {show.map((d) => (

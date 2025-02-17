@@ -7,7 +7,11 @@ export async function getFavorite(user_id: number) {
         include: {
             favorite: {
                 include: {
-                    coin: true
+                    coin: {
+                        include: {
+                            favorite: true
+                        }
+                    },
                 }
             }
         }

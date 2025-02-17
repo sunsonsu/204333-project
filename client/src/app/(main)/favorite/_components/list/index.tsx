@@ -1,6 +1,5 @@
 "use client";
 import { useAlert } from "@/hook/alert";
-import { useConfirm } from "@/hook/confirm";
 import { useHandler } from "@/hook/handle";
 import { useLoader } from "@/hook/load";
 import Favorite from "@/interface/favorite";
@@ -46,28 +45,36 @@ export default function FavoriteList() {
 
     useEffect(() => {
         if (!search) setShow(() => favList);
-        setShow(() => favList.filter((f) => f.c.includes(search)));
+        const to_search = search.toUpperCase();
+        setShow(() => favList.filter((f) => f.c.includes(to_search)));
     }, [search, favList]);
+
+    function unfavUpdate(coin: string) {
+        setFavList((p) => p.filter((f) => f.c !== coin));
+    }
 
     return (
         <section className="w-full max-w-screen-xl mx-auto">
             <article className="w-full p-4 text-end">
                 <input
                     type="text"
+                    onChange={(e) => {
+                        setSearch(e.target.value);
+                    }}
                     className="bg-black/0 border-b text-white p-1 px-2 outline-none"
                     placeholder="Search..."
                 />
             </article>
-            <article className="grid gap-4 p-4 xl:grid-cols-6">
+            <ul className="flex flex-col gap-4 p-4">
                 {show.length === 0 && (
-                    <div className="col-span-10 text-center text-white">
+                    <li className="bg-blue-950/50 p-6 rounded-md text-center text-white">
                         Not found your favorite currency.
-                    </div>
+                    </li>
                 )}
                 {show.map((f) => (
-                    <Card key={f.c} data={f} />
+                    <Card key={f.c} updateFunction={unfavUpdate} data={f} />
                 ))}
-            </article>
+            </ul>
         </section>
     );
 }

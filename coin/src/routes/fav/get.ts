@@ -14,7 +14,13 @@ export default async function(req:Request, res:Response) {
             return;
         }
 
-        res.status(200).json({ message: "success.", data: fav.favorite });
+        const change_fav_to_num = fav.favorite.map(f=>{
+            const new_f:any = { ...f };
+            new_f.coin.favorite = new_f.coin.favorite.length;
+            return new_f
+        });
+
+        res.status(200).json({ message: "success.", data: change_fav_to_num });
     } else {
         res.status(401).json({ message: "success.", data: [] });
     }
