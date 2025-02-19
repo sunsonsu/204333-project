@@ -102,4 +102,21 @@ router.post("/api/chat/:curr", async (req, res) => {
     }
 });
 
+router.delete("/api/chat/:curr/:cid", async (req, res) => {
+    const curr = req.params.curr;
+    const cid = parseInt(req.params.cid);
+
+    try {
+        const comment = await prisma.chat.delete({
+            where: {
+            cid: cid
+            }
+        });
+        res.status(200).json(comment);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "An error occurred while deleting rate" });
+    }
+});
+
 export default router;

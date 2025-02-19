@@ -46,19 +46,14 @@ const CoinData = () => {
   return (
     <>
       <div className='ml-4 mt-2 mb-2'>
-        <h1 className="text-2xl font-semibold text-white">Discussion</h1>
-        <p className="text-white mt-4">
-          {loading ? 'Loading chat ...' : `Welcome to the discussion area for: ${curr}`}
-        </p>
       </div>
-      <div className="w-full max-w-md mx-auto bg-white text-black text-center p-6 rounded-lg shadow-lg">
-        <p className="text-gray-600 text-3xl font-bold">{data.coin}</p>
-        {/* {error && <p className="text-red-500">{error}</p>} */}
-        <div className="mt-4">
-          <p className="text-gray-600">Rate: {data.rate}</p>
-          <p className="text-gray-600">
-            Last updated: {new Date(data.updatedAt).toLocaleString()}</p>
-        </div>
+
+      <div className="w-full max-w-md mx-auto bg-gradient-to-r from-[#f7f8fd] to-[#ffffff] p-2 rounded-lg shadow-lg">
+      <p className="text-black text-center text-3xl font-bold">{data.coin}</p>
+        <p className="text-center text-black text-3xl font-bold">Rate: {data.rate}</p>
+        <p className="text-center text-gray-600 text-sm font-bold">(compare with 1 USD)</p>
+          <p className="text-gray-500 text-end text-xs font-semibold">
+          {new Date(data.updatedAt).toLocaleString()}</p>
       </div>
       </>
   );
