@@ -1,3 +1,5 @@
+"use client";
+
 import { useHandler } from "@/hook/handle";
 import Favorite from "@/interface/favorite";
 import { axiosCoin } from "@/lib/axios";
