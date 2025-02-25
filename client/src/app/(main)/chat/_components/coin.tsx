@@ -53,7 +53,7 @@ const CoinData = () => {
         <p className="text-center text-black text-3xl font-bold">Rate: {data.rate}</p>
         <p className="text-center text-gray-600 text-sm font-bold">(compare with 1 USD)</p>
           <p className="text-gray-500 text-end text-xs font-semibold">
-          {new Date(data.updatedAt).toLocaleString()}</p>
+            {data.updatedAt ? new Date(data.updatedAt).toLocaleString() : 'data is up to date'}</p>
       </div>
       </>
   );

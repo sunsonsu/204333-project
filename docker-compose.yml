@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   chat:
     build:
@@ -10,30 +8,28 @@ services:
     volumes:
       - ./chat:/app
       - /app/node_modules
-    environment:
-      - NODE_ENV=development
-      - DATABASE_URL=postgresql://dev:1234@database:5432/dev
-      - REDIS_URL=redis://redis:6379
+    env_file:
+      - ./chat/.env
     depends_on:
       - database
       - redis
+    command: ["npm", "run", "dev"] # delete this line in production
 
   client:
     build:
       context: ./client
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile #recheck Dockerfile for production
     ports:
       - "3000:3000"
     volumes:
       - ./client:/app
       - /app/node_modules
-    environment:
-      - NODE_ENV=development
-      - DATABASE_URL=postgresql://dev:1234@database:5432/dev
-      - REDIS_URL=redis://redis:6379
+    env_file:
+      - ./client/.env
     depends_on:
       - database
       - redis
+    command: ["npm", "run", "dev"] # delete this line in production
 
   coin:
     build:
@@ -44,14 +40,12 @@ services:
     volumes:
       - ./coin:/app
       - /app/node_modules
-    environment:
-      - NODE_ENV=development
-      - DATABASE_URL=postgresql://dev:1234@database:5432/dev
-      - REDIS_URL=redis://redis:6379
+    env_file:
+      - ./coin/.env
     depends_on:
       - database
       - redis
-
+    command: ["npm", "run", "dev"] # delete this line in production
   login:
     build:
       context: ./login
@@ -61,30 +55,37 @@ services:
     volumes:
       - ./login:/app
       - /app/node_modules
-    environment:
-      - NODE_ENV=development
-      - DATABASE_URL=postgresql://dev:1234@database:5432/dev
-      - REDIS_URL=redis://redis:6379
+    env_file:
+      - ./login/.env
     depends_on:
       - database
       - redis
+    command: ["npm", "run", "dev"] # delete this line in production
 
   scheduler:
     build:
       context: ./scheduler
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile #recheck Dockerfile for production
     ports:
       - "3001:3001"
     volumes:
       - ./scheduler:/app
       - /app/node_modules
-    environment:
-      - NODE_ENV=development
-      - DATABASE_URL=postgresql://dev:1234@database:5432/dev
-      - REDIS_URL=redis://redis:6379
+    env_file:
+      - ./scheduler/.env
     depends_on:
       - database
       - redis
+    
+  migration:
+    build:
+      context: ./scheduler
+      dockerfile: Dockerfile 
+    command: ["npx", "prisma", "migrate", "deploy"]
+    depends_on:
+      - database
+    environment:
+      DATABASE_URL: "postgresql://dev:1234@database:5432/dev"
 
   database:
     image: postgres:16-alpine

@@ -61,8 +61,7 @@ const CommentBox = () => {
           );
       
           if (response.status === 200) {
-            console.log("Comment posted successfully!");
-      
+            // console.log("Comment posted successfully!");
             setMsgInput(""); // Clear input field
             fetchComment(); // Refetch latest comments
           }
@@ -78,8 +77,7 @@ const CommentBox = () => {
         const response = await axiosChat.delete(`/api/chat/${curr}/${cid}`, { withCredentials: true });
     
         if (response.status === 200) {
-          console.log("Deleted comment:", cid);
-    
+          // console.log("Deleted comment:", cid);
           // Update state to remove the deleted comment
           setData((prev) => prev.filter((comment) => comment.cid !== cid));
         }

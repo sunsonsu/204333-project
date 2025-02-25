@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { PrismaClient } from "@prisma/client";
+import redis from "../lib/cache";
+import catchError from "../lib/error";
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -34,13 +36,24 @@ router.get("/api/chat/:curr", async (req, res) => {
     const curr = (req.params.curr).toLocaleUpperCase();
     try {
         //check for exchangeRate data in redis
-
+        const rates_promise = redis.get("rates");
+        const [rates, err_rates] = await catchError(rates_promise);
+        let rate;
         //if redis is not work use this
-        const rate = await prisma.exchangeRate.findUnique({
-            where:{
-                coin: curr
-            }
-        });
+        if(!rates){
+            rate = await prisma.exchangeRate.findUnique({
+                where:{
+                    coin: curr
+                }
+            });
+            // console.log("From DB")
+        }else{ //if redis is working use this
+            rate = JSON.parse(rates)[curr];
+                rate = {coin: curr, rate: rate};
+
+            // console.log("From Redis")
+        }
+   
         //finding all chat of the specific coin
         const chat = await prisma.chat.findMany({
             where:{
@@ -79,7 +92,7 @@ router.get("/api/chat/:curr", async (req, res) => {
 
 //for posting new comment to the specific chat
 router.post("/api/chat/:curr", async (req, res) => {
-    const curr = req.params.curr
+    const curr = (req.params.curr).toUpperCase();
     // console.log(req.body)
     const { msg } = req.body;
 
@@ -96,6 +109,7 @@ router.post("/api/chat/:curr", async (req, res) => {
         });
         console.log(comment);
         res.status(200);
+        res.json({ message: "Comment posted successfully" });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "An error occurred while fetching rate" });
