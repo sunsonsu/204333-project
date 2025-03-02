@@ -14,4 +14,5 @@ PORT={ APP PORT }
 SECRET_KEY={ APP SECRET KEY }
 REDIS_URL=redis://hostname:port
 NODE_ENV=development | production
+BASE_PATH=/api/login
 ```

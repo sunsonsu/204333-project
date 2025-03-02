@@ -3,107 +3,72 @@ services:
     build:
       context: ./chat
       dockerfile: Dockerfile
-    ports:
-      - "3004:3004"
-    volumes:
-      - ./chat:/app
-      - /app/node_modules
     env_file:
       - ./chat/.env
     depends_on:
       - database
       - redis
-    command: ["npm", "run", "dev"] # delete this line in production
 
   client:
     build:
       context: ./client
       dockerfile: Dockerfile #recheck Dockerfile for production
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./client:/app
-      - /app/node_modules
     env_file:
       - ./client/.env
     depends_on:
       - database
       - redis
-    command: ["npm", "run", "dev"] # delete this line in production
 
   coin:
     build:
       context: ./coin
       dockerfile: Dockerfile
-    ports:
-      - "3003:3003"
-    volumes:
-      - ./coin:/app
-      - /app/node_modules
     env_file:
       - ./coin/.env
     depends_on:
       - database
       - redis
-    command: ["npm", "run", "dev"] # delete this line in production
+
   login:
     build:
       context: ./login
       dockerfile: Dockerfile
-    ports:
-      - "3002:3002"
-    volumes:
-      - ./login:/app
-      - /app/node_modules
     env_file:
       - ./login/.env
     depends_on:
       - database
       - redis
-    command: ["npm", "run", "dev"] # delete this line in production
 
   scheduler:
     build:
       context: ./scheduler
       dockerfile: Dockerfile #recheck Dockerfile for production
-    ports:
-      - "3001:3001"
-    volumes:
-      - ./scheduler:/app
-      - /app/node_modules
     env_file:
       - ./scheduler/.env
     depends_on:
       - database
       - redis
-    
-  migration:
-    build:
-      context: ./scheduler
-      dockerfile: Dockerfile 
-    command: ["npx", "prisma", "migrate", "deploy"]
-    depends_on:
-      - database
-    environment:
-      DATABASE_URL: "postgresql://dev:1234@database:5432/dev"
 
   database:
     image: postgres:16-alpine
     restart: always
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: dev
-      POSTGRES_PASSWORD: 1234
-      POSTGRES_DB: dev
+    env_file:
+      - .db.env
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
   redis:
     image: redis:alpine
     restart: always
+
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./conf.d:/etc/nginx/conf.d
+    depends_on:
+      - client
     ports:
-      - "6379:6379"
+      - 80:80
 
 volumes:
   postgres-data:
