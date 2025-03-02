@@ -4,7 +4,7 @@ FROM base AS depens
 
 WORKDIR /app
 COPY ./package.json ./
-COPY ./prisma ./
+COPY ./prisma ./prisma
 
 RUN npm install
 RUN npx prisma generate
@@ -24,7 +24,7 @@ COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/.env ./.env
 COPY --from=builder /app/node_modules ./node_modules
 
-ENV PORT=3004
+ENV PORT=3000
 
 CMD [ "node", "dist/index.js" ]
 
