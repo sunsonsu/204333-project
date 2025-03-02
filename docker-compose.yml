@@ -23,6 +23,8 @@ services:
     build:
       context: ./coin
       dockerfile: Dockerfile
+    deploy:
+      replicas: 3 # extend for 3 container
     env_file:
       - ./coin/.env
     depends_on:
