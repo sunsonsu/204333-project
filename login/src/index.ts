@@ -17,7 +17,7 @@ if (process.env.NODE_ENV !== "production") {
     app.use(Cors({ origin: ["http://localhost:3000"], credentials: true }));
 }
 
-app.use(router);
+app.use(process.env.BASE_PATH || "/", router);
 
 app.listen(PORT, async ()=>{
     await redis.connect();

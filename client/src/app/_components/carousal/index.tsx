@@ -1,6 +1,12 @@
 "use client";
 import { DataContext } from "@/context/data";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, {
+    Suspense,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 import Card from "./card";
 import { useSearchParams } from "next/navigation";
 
@@ -56,7 +62,9 @@ export default function Carousal() {
             <div className="w-full overflow-hidden">
                 <div
                     className="w-1/5 max-xl:w-1/4 max-lg:w-1/3 max-md:w-1/2 max-sm:w-full h-80 top-0 relative transition-all"
-                    style={{ transform: `translateX(${currentIndex * -100}%)` }}
+                    style={{
+                        transform: `translateX(${currentIndex * -100}%)`,
+                    }}
                 >
                     {data.map((d, index) => (
                         <Card

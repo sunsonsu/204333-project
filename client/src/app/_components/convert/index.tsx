@@ -1,7 +1,7 @@
 "use client";
 import { numberOnly } from "@/lib/form";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useContext, useEffect, useState } from "react";
+import React, { Suspense, useContext, useEffect, useState } from "react";
 import { DataContext } from "@/context/data";
 import { RiArrowUpDownFill } from "react-icons/ri";
 import { isNumber } from "@/lib/general";

@@ -18,6 +18,7 @@ import React, {
 interface CoinInterface {
     message: string;
     data: { [key: string]: number };
+    host: string;
 }
 
 interface FavoriteInterface {
@@ -53,6 +54,7 @@ export default function DataProvider(prop: DefaultProp) {
 
                 const response = await axiosCoin.get<CoinInterface>("/coin");
                 if (response.status === 200) {
+                    console.log("Get From Host: ", response.data.host);
                     const rates = response.data.data;
                     const coins_data = Object.keys(rates).map((key) => {
                         return {
