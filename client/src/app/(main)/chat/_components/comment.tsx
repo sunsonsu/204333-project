@@ -14,6 +14,7 @@ interface uchatID {
 interface ResponseApi {
    chat: CommentInfo[]
    uchatID: uchatID[]
+   user_id: number | string
 }
 
 
@@ -21,6 +22,7 @@ const CommentBox = () => {
     
     const [data, setData] = useState<CommentInfo[]>([]);
     const [ucid,setUcid] = useState<uchatID[]>([]);
+    const [user_id, setUser_id] = useState<number | string>();
     const { curr } = useParams();  // 'curr' comes from the dynamic route parameter
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -38,6 +40,7 @@ const CommentBox = () => {
             let cidArray = ucid.map(item => item.cid);
             setData(result.chat);
             console.log(cidArray);
+            setUser_id(result.user_id);
         }
         } catch (error: any) {
         setError(error.message);
@@ -62,6 +65,7 @@ const CommentBox = () => {
       
           if (response.status === 200) {
             // console.log("Comment posted successfully!");
+      
             setMsgInput(""); // Clear input field
             fetchComment(); // Refetch latest comments
           }
@@ -97,29 +101,36 @@ const CommentBox = () => {
         </div>
   
         {/* Add Comment Input */}
-        <div className="bg-gray-100 p-4 border-b flex">
-          <input  
-            type="text"
-            placeholder="add your comment"
-            className="w-full p-2 border rounded-md flex-grow"
-            value={msgInput}
-            onChange={(e) => setMsgInput(e.target.value)}
-          />
-          <button onClick={handlePost} className="ml-2 p-2  bg-blue-500 text-white rounded-md">Post</button>
-        </div>
-  
+        {user_id !== "not authen" && (
+          <div className="bg-gray-100 p-4 border-b flex">
+            <input  
+              type="text"
+              placeholder="add your comment"
+              className="w-full p-2 border rounded-md flex-grow"
+              value={msgInput}
+              onChange={(e) => setMsgInput(e.target.value)}
+            />
+            <button onClick={handlePost} className="ml-2 p-2  bg-blue-500 text-white rounded-md">Post</button>
+          </div>
+        )}
+        
         {/* Comments List */}
         <div className="divide-y divide-gray-300">
-            {data.map(comment => (
-            <div key={comment.cid} className="flex justify-between items-center p-4 bg-[#FBFBFB]">
+          {data.length === 0 ? (
+            <div className="p-4 text-center bg-white text-gray-500">No comments yet</div>
+          ) : (
+            data.map(comment => (
+              <div key={comment.cid} className="flex justify-between items-center p-4 bg-[#FBFBFB]">
+            <span className={`font-medium ${comment.uid === user_id ? 'text-green-600' : 'text-blue-600'}`}>{comment.username}</span>
+          <span className="text-gray-800 text-center flex-grow">{comment.msg}</span>
+          <span className="text-gray-500 text-sm">{new Date(comment.createdAt).toLocaleString()}</span>
 
-                <span className={`font-medium ${ucid.some(item => item.cid === comment.cid) ? 'text-blue-900' : 'text-blue-600'}`}>{comment.username}</span>
-              <span className="text-gray-800 text-center flex-grow">{comment.msg}</span>
-              {ucid.some(item => item.cid === comment.cid) && (
-              <a href="#" onClick={(e) => { e.preventDefault(); handleDel(comment.cid) }} className="ml-2 p-1 text-black rounded-md text-sm"><FontAwesomeIcon icon={faTrash} /></a>
-              )}
-            </div>
-            ))}
+          {comment.uid === user_id && (
+            <a href="#" onClick={(e) => { e.preventDefault(); handleDel(comment.cid) }} className="ml-2 p-1 text-black rounded-md text-sm"><FontAwesomeIcon icon={faTrash} /></a>
+          )}
+              </div>
+            ))
+          )}
         </div>
       </div>
     );

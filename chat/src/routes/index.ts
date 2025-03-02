@@ -11,19 +11,43 @@ router.get("/api/chat", async (req, res) => {
     try {
         const chat = await prisma.chat.findMany({
             orderBy: {
-                createdAt: 'desc'
+            createdAt: 'desc'
             }
         });
-        const return_value: { [key: string]: number } = {};
-        for (let i = 0; i < chat.length; i++) {
-            if (!(chat[i]['c'] in return_value)) {
-                return_value[chat[i]['c']] = 1;
-            }else{
-                return_value[chat[i]['c']] += 1;
+        const dict_curr: { [key: string]: number } = {};
+        const allCoins = await prisma.exchangeRate.findMany({
+            select: {
+            coin: true
             }
-        } 
-  
-        res.json(return_value);
+        });
+
+        // Initialize all coins with 0
+        allCoins.forEach(coin => {
+            dict_curr[coin.coin] = 0;
+        });
+
+        // Count occurrences of each coin in chat
+        for (let i = 0; i < chat.length; i++) {
+            if (!(chat[i]['c'] in dict_curr)) {
+            dict_curr[chat[i]['c']] = 1;
+            } else {
+            dict_curr[chat[i]['c']] += 1;
+            }
+        }
+
+        // Sort dict_curr by value in descending order
+        let sortedDictCurr;
+        if (req.query.order === 'asc') {
+            sortedDictCurr = Object.entries(dict_curr)
+            .sort(([a], [b]) => a.localeCompare(b))
+            .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
+        } else {
+            sortedDictCurr = Object.entries(dict_curr)
+            .sort(([, a], [, b]) => b - a)
+            .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
+        }
+
+        res.json(sortedDictCurr);
 
     } catch (error) {
         console.error(error);
@@ -50,7 +74,6 @@ router.get("/api/chat/:curr", async (req, res) => {
         }else{ //if redis is working use this
             rate = JSON.parse(rates)[curr];
                 rate = {coin: curr, rate: rate};
-
             // console.log("From Redis")
         }
    
@@ -73,7 +96,20 @@ router.get("/api/chat/:curr", async (req, res) => {
             });
             return { ...message, username: user?.name };//returning the chat data with username
         }));
-
+        console.log(req.session.user_id)
+        // let uchatID;
+        // if(req.session.user_id){
+        //     const uchatID = await prisma.chat.findMany({
+        //         where: {
+        //           uid: req.session.user_id as number,
+        //         },
+        //         select: {
+        //           cid: true
+        //         },
+        //       });
+        // }else{
+        //     const uchatID = [];
+        // }
         const uchatID = await prisma.chat.findMany({
             where: {
               uid: req.session.user_id as number,
@@ -82,8 +118,8 @@ router.get("/api/chat/:curr", async (req, res) => {
               cid: true
             },
           });
-        
-        res.json({ rate, chat: users,uchatID }); //returning the rate and chat data
+        const user_id = req.session.user_id ? req.session.user_id : "not authen";
+        res.json({ rate, chat: users, uchatID, user_id }); //returning the rate and chat data
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "An error occurred while fetching rate" });
