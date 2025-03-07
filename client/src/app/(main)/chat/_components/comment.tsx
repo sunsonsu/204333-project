@@ -77,11 +77,14 @@ const CommentBox = () => {
 
 
     const handleDel = async (cid: number) => {
+      const confirmDelete = window.confirm("Are you sure you want to delete this comment?");
+  
+      if (!confirmDelete) return; // If user cancels, do nothing
+    
       try {
         const response = await axiosChat.delete(`/api/chat/${curr}/${cid}`, { withCredentials: true });
     
         if (response.status === 200) {
-          // console.log("Deleted comment:", cid);
           // Update state to remove the deleted comment
           setData((prev) => prev.filter((comment) => comment.cid !== cid));
         }
@@ -109,6 +112,7 @@ const CommentBox = () => {
               className="w-full p-2 border rounded-md flex-grow"
               value={msgInput}
               onChange={(e) => setMsgInput(e.target.value)}
+              required
             />
             <button onClick={handlePost} className="ml-2 p-2  bg-blue-500 text-white rounded-md">Post</button>
           </div>
@@ -126,8 +130,13 @@ const CommentBox = () => {
           <span className="text-gray-500 text-sm">{new Date(comment.createdAt).toLocaleString()}</span>
 
           {comment.uid === user_id && (
-            <a href="#" onClick={(e) => { e.preventDefault(); handleDel(comment.cid) }} className="ml-2 p-1 text-black rounded-md text-sm"><FontAwesomeIcon icon={faTrash} /></a>
+            <a href="#" 
+              onClick={(e) => { e.preventDefault(); handleDel(comment.cid); }} 
+              className="ml-2 p-1 text-black rounded-md text-sm">
+              <FontAwesomeIcon icon={faTrash} />
+            </a>
           )}
+
               </div>
             ))
           )}

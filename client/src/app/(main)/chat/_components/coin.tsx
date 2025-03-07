@@ -44,18 +44,14 @@ const CoinData = () => {
   if (! data) return <p>Loading...</p>;
 
   return (
-    <>
-      <div className='ml-4 mt-2 mb-2'>
-      </div>
-
-      <div className="w-full max-w-md mx-auto bg-gradient-to-r from-[#f7f8fd] to-[#ffffff] p-2 rounded-lg shadow-lg">
-      <p className="text-black text-center text-3xl font-bold">{data.coin}</p>
-        <p className="text-center text-black text-3xl font-bold">Rate: {data.rate}</p>
-        <p className="text-center text-gray-600 text-sm font-bold">(compare with 1 USD)</p>
-          <p className="text-gray-500 text-end text-xs font-semibold">
-            {data.updatedAt ? new Date(data.updatedAt).toLocaleString() : 'data is up to date'}</p>
-      </div>
-      </>
+    <div className="w-full max-w-md mx-auto bg-blue-950/30 p-6 rounded-lg shadow-md border border-gray-200">
+        <h2 className="text-white text-center text-3xl font-bold">{data?.coin}</h2>
+        <p className="text-center text-gray-300 text-2xl font-semibold mt-2">Rate: <span className="text-blue-500">{data?.rate}</span></p>
+        <p className="text-center text-gray-200 text-sm">(Compared with 1 USD)</p>
+        <p className="text-gray-400 text-end text-xs font-medium mt-4">
+            {data?.updatedAt ? new Date(data.updatedAt).toLocaleString() : 'Data is up to date'}
+        </p>
+    </div>
   );
 };
 

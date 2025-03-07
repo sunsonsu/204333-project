@@ -58,10 +58,10 @@ const CurrencyChatList = () => {
         <div className="bg-[#F7F7F7] space-y-2">
           {filteredData.map((currency) => (
             <div className="p-4 text-gray-800 font-semibold text-lg flex justify-between items-center border-b" key={currency}>
-              <a href={`chat/${currency}`} target='_blank' className='flex-grow'>
+              <a href={`chat/${currency}`} className='flex-grow'>
                 {currency}
               </a>
-              <a href={`chat/${currency}`} target='_blank'>
+              <a href={`chat/${currency}`}>
                 <p className='text-right'>
                   <FontAwesomeIcon icon={faComment} /> {data?.[currency]}
                 </p>
